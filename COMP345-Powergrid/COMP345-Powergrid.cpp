@@ -1,12 +1,17 @@
 // COMP345-Powergrid.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-#include "pch.h"
+#include "Player.h"
 #include <iostream>
+
+using std::cout;
+using std::endl;
 
 int main()
 {
-    std::cout << "Hello World!\n"; 
+	Player p1 = Player("blue", 50, 0);
+	Player p2 = Player("red", 50, 0);
+	cout << p1.getColor() << endl;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
