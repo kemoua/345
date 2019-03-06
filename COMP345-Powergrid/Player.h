@@ -20,8 +20,8 @@ public:
 	void setColor(string color) { this->color = color; }
 	int getMoney() const { return money; }
 	void setMoney(int money) { this->money = money; }
-	map<Resource, int> getResource() const { return resources; }
-	void setResource(Resource r, int q) { resources[r] = q; }
+	map<string, int> getResource() const { return resources; }
+	void setResource(Resource r, int q) { resources[r.getType()] = q; }
 
 	void buyPowerplantCard(PowerplantCard p, int cost);
 	void buyResource(Resource r);
@@ -30,7 +30,7 @@ public:
 private:
 	string color;
 	int money;
-	map<Resource, int> resources;
+	map<string, int> resources;
 	vector<City> cities;
 	vector<PowerplantCard> powerplantCards;
 };

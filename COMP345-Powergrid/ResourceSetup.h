@@ -11,11 +11,15 @@ public:
 	ResourceSetup();
 
 	map<string, int> getHouses() const { return houses; }
-	map<string, int> getResources() const { return resources; }
+	map<string, int> getResourcesTotal() const { return resourcesTotal; }
+	map<string, int> getResourcesOnBoard() const { return resourcesOnBoard; }
 	Money getMoney() const { return money; }
+
+	map<string, int> getCheapestPricePerResource() const;
 
 private:
 	map<string, int> houses;
-	map<string, int> resources;
+	map<string, int> resourcesTotal;
+	map<string, int> resourcesOnBoard;
 	Money money;
 };
