@@ -22,11 +22,11 @@ ResourceSetup::ResourceSetup() {
 	resourcesOnBoard["garbage"] = 6;
 	resourcesOnBoard["uranium"] = 2;
 
+	updateCheapestPrices();
 	money = 10000;
 }
 
-map<string, int> ResourceSetup::getCheapestPricePerResource() const{
-	map<string, int> cheapestPrices;
+void ResourceSetup::updateCheapestPrices() {
 	for (auto r : resourcesOnBoard) {
 		string f = r.first;
 		int s = r.second;
@@ -42,5 +42,34 @@ map<string, int> ResourceSetup::getCheapestPricePerResource() const{
 			}
 		}
 	}
-	return cheapestPrices;
+}
+
+void ResourceSetup::updateCheapestPrice(string resourceType) {
+	int qtyOnBoard = resourcesOnBoard[resourceType];
+	if (resourceType != "uranium") {
+		cheapestPrices[resourceType] = 9 - ceil(qtyOnBoard / 3);
+	}
+	else {
+		if (qtyOnBoard < 5) {
+			cheapestPrices[resourceType] = 18 - 2 * qtyOnBoard;
+		}
+		else {
+			cheapestPrices[resourceType] = 13 - qtyOnBoard;
+		}
+	}
+}
+
+Resource ResourceSetup::getNextResource(string resourceType) {
+	int cost = cheapestPrices[resourceType];
+	return Resource(resourceType, cost);
+}
+
+void ResourceSetup::addResource(string type, int qty) {
+	resourcesOnBoard[type] += qty;
+	updateCheapestPrice(type);
+}
+
+void ResourceSetup::removeResource(string type, int qty) {
+	resourcesOnBoard[type] -= qty;
+	updateCheapestPrice(type);
 }

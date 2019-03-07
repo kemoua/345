@@ -15,11 +15,18 @@ public:
 	map<string, int> getResourcesOnBoard() const { return resourcesOnBoard; }
 	Money getMoney() const { return money; }
 
-	map<string, int> getCheapestPricePerResource() const;
+	void updateCheapestPrices();
+	void updateCheapestPrice(string resourceType);
+	map<string, int> getCheapestPrices() const { return cheapestPrices; }
+
+	Resource getNextResource(string type);
+	void addResource(string type, int qty);
+	void removeResource(string type, int qty);
 
 private:
 	map<string, int> houses;
 	map<string, int> resourcesTotal;
 	map<string, int> resourcesOnBoard;
+	map<string, int> cheapestPrices;
 	Money money;
 };

@@ -33,7 +33,6 @@ void Player::buyResource(Resource r) {
 		cout << "You need " << resourceCost << " elektros to buy this resource, but you only have " << money << endl;
 	}
 	else {
-		//int currentQty = resources[r];
 		resources[r.getType()] += 1;
 		money -= resourceCost;
 	}

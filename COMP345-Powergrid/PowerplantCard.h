@@ -1,16 +1,29 @@
 #pragma once
 #include <vector>
+#include <string>
 #include "Resource.h"
+#include "Card.h"
 
 using std::vector;
 
-class PowerplantCard {
+class PowerplantCard : public Card {
 public:
 	PowerplantCard() {}
-	PowerplantCard(int number, vector<Resource> resources, int cities) : number(number), resources(resources), cities(cities) {};
+	PowerplantCard(int number, string resourceType, int resourceQty, int cities) : number(number), resourceType(resourceType), resourceQty(resourceQty), cities(cities) {};
+
+	int getNumber() const { return number; }
+	string getResourceType() const { return resourceType; }
+	int getResourceQty() const { return resourceQty; }
+	int getCities() const { return cities; }
+
+	bool operator < (const PowerplantCard& p) const
+	{
+		return (number < p.number);
+	}
 
 private:
 	int number;
-	vector<Resource> resources;
+	string resourceType;
+	int resourceQty;
 	int cities;
 };

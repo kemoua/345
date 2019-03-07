@@ -16,6 +16,9 @@
     <Filter Include="Resource Files\Maps">
       <UniqueIdentifier>{17fd2de6-7956-4599-a8f4-7c7fe6a2e28d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Cards">
+      <UniqueIdentifier>{e6ad018d-8556-4ac2-acf2-8ba64ed9f42f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -63,6 +66,12 @@
     <ClInclude Include="Step3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CardDriver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Card.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -92,10 +101,16 @@
     <ClCompile Include="City.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CardDriver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="MapUSA.txt">
       <Filter>Resource Files\Maps</Filter>
+    </Text>
+    <Text Include="PowerplantCards.txt">
+      <Filter>Resource Files\Cards</Filter>
     </Text>
   </ItemGroup>
 </Project>

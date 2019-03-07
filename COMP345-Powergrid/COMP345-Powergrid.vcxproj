@@ -151,6 +151,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Card.h" />
+    <ClInclude Include="CardDriver.h" />
     <ClInclude Include="City.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Connection.h" />
@@ -168,6 +170,7 @@
     <ClInclude Include="SummaryCard.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CardDriver.cpp" />
     <ClCompile Include="City.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="COMP345-Powergrid.cpp" />
@@ -185,6 +188,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="MapUSA.txt" />
+    <Text Include="PowerplantCards.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
