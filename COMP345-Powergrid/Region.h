@@ -1,3 +1,6 @@
+/**
+	Represents a region with its cities.
+*/
 #pragma once
 #include <string>
 #include <vector>

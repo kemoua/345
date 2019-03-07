@@ -1,3 +1,7 @@
+/**
+	Represents a summary card.
+	Stores the description of the card.
+*/
 #pragma once
 #include <string>
 #include <iostream>

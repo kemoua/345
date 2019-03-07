@@ -1,3 +1,6 @@
+/**
+	Represents the money of the game.
+*/
 #pragma once
 
 class Money {

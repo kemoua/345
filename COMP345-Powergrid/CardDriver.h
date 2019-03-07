@@ -1,3 +1,7 @@
+/**
+	Class that creates the required powerplant cards.
+	Handles actions on the cards.
+*/
 #pragma once
 #include <vector>
 #include "PowerplantCard.h"

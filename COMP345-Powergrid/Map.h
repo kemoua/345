@@ -1,3 +1,7 @@
+/**
+	Represents the map of the game.
+	Contains regions, cities and their connections.
+*/
 #pragma once
 #include <vector>
 #include  "Region.h"
@@ -18,6 +22,8 @@ public:
 	vector<Region> getRegions() const { return regions;  }
 	vector<City> getCities() const { return cities; }
 	vector<Connection> getConnections() const { return connections; }
+
+	void displayConnectionsForCity(City c) const;
 
 private:
 	vector<Region> regions;

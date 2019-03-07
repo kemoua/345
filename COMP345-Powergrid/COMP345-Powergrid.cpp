@@ -14,15 +14,22 @@ using std::cout;
 using std::endl;
 using std::vector;
 
-int main()
-{
-	//Map Test
-	/*MapLoader loader = MapLoader();
+void testMap() {
+	MapLoader loader = MapLoader();
 	loader.loadMap("MapUSA.txt");
 	Map m = Map(loader.getRegions(), loader.getCities(), loader.getConnections());
-	loader.~MapLoader();*/
-	/******************************************************************************************/
-	//Player Test
+	loader.~MapLoader();
+	cout << "List of cities with their connections: " << endl;
+	for (auto c : m.getCities()) {
+		m.displayConnectionsForCity(c);
+	}
+	cout << endl << "Connections list: " << endl;
+	for (auto c : m.getConnections()) {
+		cout << c.toString() << endl;
+	}
+}
+
+void testPlayer() {
 	Player p1 = Player("blue", 50);
 	Player p2 = Player("red", 50);
 	City c1 = City("c1");
@@ -84,10 +91,11 @@ int main()
 	}
 	cout << endl << "p1 money: " << p1.getMoney() << endl;
 	cout << "p2 money: " << p2.getMoney() << endl;
+}
 
-	/******************************************************************************************/
+void testHousesEtc() {
 	//Houses, resources, money Test
-	/*ResourceSetup rs = ResourceSetup();
+	ResourceSetup rs = ResourceSetup();
 	cout << "Resources on board: " << endl;
 	for (auto i : rs.getResourcesOnBoard()) {
 		cout << i.first << ": " << i.second << endl;
@@ -95,10 +103,22 @@ int main()
 	cout << "Lowest price for each resources: " << endl;
 	for (auto i : rs.getCheapestPrices()) {
 		cout << i.first << ": " << i.second << endl;
-	}*/
-	/******************************************************************************************/
-	//Powerplant Cards Test
-	/*CardDriver cd = CardDriver();
+	}
+	rs.removeResource("uranium", 1);
+	rs.addResource("garbage", 5);
+	rs.removeResource("coal", 3);
+	cout << "Resources on board: " << endl;
+	for (auto i : rs.getResourcesOnBoard()) {
+		cout << i.first << ": " << i.second << endl;
+	}
+	cout << "Lowest price for each resources: " << endl;
+	for (auto i : rs.getCheapestPrices()) {
+		cout << i.first << ": " << i.second << endl;
+	}
+}
+
+void testPowerPlantCards() {
+	CardDriver cd = CardDriver();
 	for (auto card : cd.getCards()) {
 		cout << card.getNumber() << " ";
 	}
@@ -122,6 +142,15 @@ int main()
 		else {
 			cout << "This powerplant number is not available." << endl;
 		}
-	}*/
+	}
+}
 
+int main()
+{
+	//uncomment test to run
+
+	testMap();
+	//testPlayer();
+	//testHousesEtc();
+	//testPowerPlantCards();
 }

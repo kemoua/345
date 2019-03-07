@@ -1,4 +1,7 @@
+#include <iostream>
 #include "Map.h"
+
+using std::cout;
 
 Map::Map(vector<Region> regions, vector<City> cities, vector<Connection> connections) :
 	regions(regions), cities(cities), connections(connections) {}
@@ -17,4 +20,19 @@ void Map::createConnection(City startCity, City endCity, int cost) {
 
 void Map::addCityToRegion(City city, Region region) {
 	region.addCity(city);
+}
+
+//Display for a city the list of cities connected to it and the costs associated to the connections
+void Map::displayConnectionsForCity(City city) const {
+	string cityName = city.getName();
+	cout << cityName << ": ";
+	for (auto c : connections) {
+		if (cityName == c.getStartCity().getName()) {
+			cout << c.getEndCity().getName() << " (" << c.getCost() << ") ";
+		}
+		else if (cityName == c.getEndCity().getName()) {
+			cout << c.getStartCity().getName() << " (" << c.getCost() << ") ";
+		}
+	}
+	cout << std::endl;
 }

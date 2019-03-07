@@ -1,3 +1,6 @@
+/**
+	Represents a resource.
+*/
 #pragma once
 #include <string>
 

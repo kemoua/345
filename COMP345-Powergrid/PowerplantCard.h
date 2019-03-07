@@ -1,3 +1,6 @@
+/**
+	Represents a powerplant card.
+*/
 #pragma once
 #include <vector>
 #include <string>
@@ -22,8 +25,8 @@ public:
 	}
 
 private:
-	int number;
-	string resourceType;
-	int resourceQty;
-	int cities;
+	int number; //The number of the card
+	string resourceType; //The type of resources needed for this plant
+	int resourceQty; //The number of resources needed
+	int cities; //The number of cities this card can power up
 };

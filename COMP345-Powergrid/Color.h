@@ -1,3 +1,6 @@
+/**
+	Return a color from an int value
+*/
 #pragma once
 #include <string>
 

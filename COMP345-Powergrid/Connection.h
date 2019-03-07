@@ -1,3 +1,7 @@
+/**
+	Represents a connection between two cities and its cost.
+*/
+
 #pragma once
 #include <string>
 #include "City.h"

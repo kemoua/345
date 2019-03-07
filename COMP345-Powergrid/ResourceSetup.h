@@ -1,3 +1,8 @@
+/**
+	Class that sets up the number of resources, houses and money available at the start of the game.
+	Handles the resources on the board.
+	Keeps track of the minimal cost of each resource.
+*/
 #pragma once
 #include <map>
 #include "House.h"

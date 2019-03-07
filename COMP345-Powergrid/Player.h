@@ -1,3 +1,7 @@
+/**
+	Represents a player.
+	Handles actions that the player can make, such as buying houses or buying resources.
+*/
 #pragma once
 #include <string>
 #include <vector>

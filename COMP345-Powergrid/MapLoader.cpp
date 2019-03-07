@@ -18,6 +18,7 @@ bool testMap(vector<City> cities, std::map<string, int> connectionsPerCity) {
 }
 
 void MapLoader::loadMap(std::string filename) {
+	//Try to read the txt file of the map
 	ifstream input(filename);
 
 	if (input.fail())
@@ -32,6 +33,8 @@ void MapLoader::loadMap(std::string filename) {
 		Region r;
 		std::map<string, int> connectionsPerCity;
 
+		//Handle the first part of the file, delimited by '// Connection', which represents the list of cities with their region
+		//The format in the file is: Region City
 		while (!input.eof())
 		{
 			input >> regionName >> cityName;
@@ -51,6 +54,8 @@ void MapLoader::loadMap(std::string filename) {
 			r.addCity(c);
 		}
 
+		//Handle the second part of the file, which represents the connections
+		//The format in the file is: City City Cost
 		while (!input.eof())
 		{
 			input >> startCityName >> endCityName >> cost;
@@ -59,7 +64,8 @@ void MapLoader::loadMap(std::string filename) {
 			connectionsPerCity[endCityName] += 1;
 		}
 		
-		if (!testMap(cities, connectionsPerCity)) {
+		//Once everything is loaded, test if the map is valid
+		if (!testMap(cities, connectionsPerCity)) { //Map is invalid if there is a city with no connections
 			cout << "Invalid Map" << endl;
 		}
 

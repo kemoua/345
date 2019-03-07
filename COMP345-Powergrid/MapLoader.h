@@ -1,3 +1,6 @@
+/**
+	Class that reads a text file and convert a map from it.
+*/
 #pragma once
 #include <string>
 #include <vector>

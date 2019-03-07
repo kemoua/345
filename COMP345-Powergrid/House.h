@@ -1,3 +1,6 @@
+/**
+	Represents a house.
+*/
 #pragma once
 #include <string>
 

@@ -7,6 +7,7 @@
 using std::cout;
 using std::endl;
 
+//Initial setup
 ResourceSetup::ResourceSetup() {
 	for (int i = 0; i < 6; i++) {
 		houses[Color::getColor(i)] = 22;
@@ -26,6 +27,7 @@ ResourceSetup::ResourceSetup() {
 	money = 10000;
 }
 
+//Update cheapest price available for each type of resources
 void ResourceSetup::updateCheapestPrices() {
 	for (auto r : resourcesOnBoard) {
 		string f = r.first;
@@ -59,16 +61,19 @@ void ResourceSetup::updateCheapestPrice(string resourceType) {
 	}
 }
 
+//Return the next available resource of a specific type
 Resource ResourceSetup::getNextResource(string resourceType) {
 	int cost = cheapestPrices[resourceType];
 	return Resource(resourceType, cost);
 }
 
+//Add resource on the board
 void ResourceSetup::addResource(string type, int qty) {
 	resourcesOnBoard[type] += qty;
 	updateCheapestPrice(type);
 }
 
+//Remove resource from the board
 void ResourceSetup::removeResource(string type, int qty) {
 	resourcesOnBoard[type] -= qty;
 	updateCheapestPrice(type);
