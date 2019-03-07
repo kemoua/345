@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include "PowerplantCard.h"
+#include "SummaryCard.h"
 #include "Step3.h"
 #include "CardDriver.h"
 #include <algorithm>
@@ -78,4 +79,9 @@ bool CardDriver::buyCard(int number) {
 		}
 	}
 	return false;
+}
+
+void CardDriver::viewSummary() const {
+	cout << summary.getPaymentOrder() << endl;
+	cout << summary.getPlayOrder() << endl;
 }

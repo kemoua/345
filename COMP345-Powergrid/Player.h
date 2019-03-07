@@ -13,7 +13,7 @@ using std::map;
 class Player {
 public:
 	Player();
-	Player(string color, int elektro);
+	Player(string color, int money);
 	~Player();
 
 	string getColor() const { return color; }
@@ -22,10 +22,12 @@ public:
 	void setMoney(int money) { this->money = money; }
 	map<string, int> getResource() const { return resources; }
 	void setResource(Resource r, int q) { resources[r.getType()] = q; }
+	vector<PowerplantCard> getPowerplantCards() const { return powerplantCards; }
+	vector<City> getCities() const { return cities; }
 
 	void buyPowerplantCard(PowerplantCard p, int cost);
 	void buyResource(Resource r);
-	void buyHouse(City c);
+	bool buyHouse(City c);
 
 private:
 	string color;

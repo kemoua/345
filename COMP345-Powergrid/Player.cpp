@@ -9,7 +9,8 @@ Player::Player(string color, int money) : color(color), money(money) {}
 Player::~Player() {}
 
 //TODO: add number of houses per player condition 
-void Player::buyHouse(City c) {
+bool Player::buyHouse(City c) {
+	cout << "buying " << c.getName() << endl;
 	int houseNumber = c.getHouses().size();
 	int houseCost = c.getCost();
 	if (houseNumber == 3) {
@@ -21,10 +22,11 @@ void Player::buyHouse(City c) {
 		}
 		else {
 			cities.push_back(c);
-			c.addHouse(House(color));
 			money -= houseCost;
+			return true;
 		}
 	}
+	return false;
 }
 
 void Player::buyResource(Resource r) {
@@ -39,6 +41,11 @@ void Player::buyResource(Resource r) {
 }
 
 void Player::buyPowerplantCard(PowerplantCard p, int cost) {
-	powerplantCards.push_back(p);
-	money -= cost;
+	if (money < cost) {
+		cout << "You need " << cost << " elektros to buy this powerplant, but you only have " << money << endl;
+	}
+	else {
+		powerplantCards.push_back(p);
+		money -= cost;
+	}
 }
