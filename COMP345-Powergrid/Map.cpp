@@ -39,25 +39,29 @@ void Map::displayConnectionsForCity(City city) const {
 	cout << std::endl;
 }
 
-vector<string> Map::getRegionAdjacency(string regionName) const {
+vector<string> Map::getRegionAdjacency(vector<string> regionsName) const {
 	vector<string> adj;
-	for (auto c : connections) {
-		if (c.getStartCity().getRegionName() == regionName) {
-			adj.push_back(c.getEndCity().getRegionName());
-		}
-		if (c.getEndCity().getRegionName() == regionName) {
-			adj.push_back(c.getStartCity().getRegionName());
+	for (auto regionName : regionsName) {
+		for (auto c : connections) {
+			if (c.getStartCity().getRegionName() == regionName) {
+				adj.push_back(c.getEndCity().getRegionName());
+			}
+			if (c.getEndCity().getRegionName() == regionName) {
+				adj.push_back(c.getStartCity().getRegionName());
+			}
 		}
 	}
 	std::sort(adj.begin(), adj.end());
-	string current = "";
-	for (auto it = adj.begin(); it != adj.end();) {
-		if (*it == regionName || *it == current) {
-			it = adj.erase(it);
-		}
-		else {
-			current = *it;
-			++it;
+	for (auto regionName : regionsName) {
+		string current = "";
+		for (auto it = adj.begin(); it != adj.end();) {
+			if (*it == regionName || *it == current) {
+				it = adj.erase(it);
+			}
+			else {
+				current = *it;
+				++it;
+			}
 		}
 	}
 	return adj;

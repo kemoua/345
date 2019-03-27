@@ -23,7 +23,7 @@ public:
 	vector<Region> getRegions() const { return regions;  }
 	vector<City> getCities() const { return cities; }
 	vector<Connection> getConnections() const { return connections; }
-	vector<string> getRegionAdjacency(string regionName) const;
+	vector<string> getRegionAdjacency(vector<string> regionsName) const;
 	vector<Region> getAvailableRegions() const { return availableRegions; }
 	vector<City> getAvailableCities() const { return availableCities; }
 
