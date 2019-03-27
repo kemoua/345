@@ -50,6 +50,11 @@ public:
 		return (cities.size() < p.getCities().size());
 	}
 
+	bool operator == (const Player& p) const
+	{
+		return (color == p.getColor());
+	}
+
 private:
 	string color;
 	int money;

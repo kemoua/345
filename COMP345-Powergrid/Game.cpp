@@ -134,11 +134,7 @@ void Game::start() {
 		cout << city.getName() << " ";
 	}
 	cout << endl;
-}
-
-bool playerPriority(Player p1, Player p2) {
-	
-	return true;
+	cout << "**************************************************" << endl;
 }
 
 //Determine new player order
@@ -149,4 +145,143 @@ void Game::phase1() {
 		cout << player.getColor() << " ";
 	}
 	cout << endl;
+	cout << "**************************************************" << endl;
 }
+
+void updatePlayersNotDone(vector<Player>* playersPtr, Player p) {
+	for (auto it = (*playersPtr).begin(); it != (*playersPtr).end();) {
+		if (*it == p ) {
+			it = (*playersPtr).erase(it);
+			break;
+		}
+		else {
+			++it;
+		}
+	}
+}
+
+Player bidPhase(vector<Player>* playersNotDone, PowerplantCard* cardBid, vector<Player>* gamePlayersPtr) {
+	vector<Player> bidPlayers = *playersNotDone;
+	vector<Player>* bidPlayersPtr = &bidPlayers;
+	bool bid = true;
+	int minimumBid = bidPlayers.size() == 1 ? cardBid->getNumber() : cardBid->getNumber() - 1;
+	int bidInput;
+	while (bid) {
+		//Bid is over when there's only one possible bidder
+		if (bidPlayers.size() == 1) {
+			cout << "Winner of the auction is " << bidPlayers.at(0).getColor();
+			cout << " with a bid of " << minimumBid << " elektro." << endl;
+			bid = false;
+		}
+		else {
+			int index = 0;
+			while (bidPlayers.size() > 1) {
+				Player player = bidPlayers.at(index);
+				cout << "Player " << player.getColor() << " with " << player.getMoney() << " elektro enter bid: ";
+				cin >> bidInput;
+				while (bidInput != 0 && (bidInput < (minimumBid + 1) || bidInput > player.getMoney())) {
+					cout << "You must bid at least " << (minimumBid + 1) << " elektro and you cannot bid more than what you have." << endl;
+					cout << "Enter new bid: ";
+					cin >> bidInput;
+				}
+				if (bidInput == 0) {
+					for (auto it = (*bidPlayersPtr).begin(); it != (*bidPlayersPtr).end();) {
+						if ((*it) == player) {
+							it = (*bidPlayersPtr).erase(it);
+							break;
+						}
+						else {
+							++it;
+						}
+					}
+				}
+				else {
+					minimumBid = bidInput;
+					//Check if the other players have enough money for the minimum bid
+					for (auto it = (*bidPlayersPtr).begin(); it != (*bidPlayersPtr).end();) {
+						if (!((*it) == player) && (*it).getMoney() < (minimumBid + 1)) {
+							it = (*bidPlayersPtr).erase(it);
+						}
+						else {
+							++it;
+						}
+					}
+					index++;
+				}
+				if (index >= bidPlayers.size()) {
+					index = 0;
+				}
+			}
+		}
+	}
+	//Player winning the bid gets the card
+	for (Player& player : *gamePlayersPtr) {
+		if (player == bidPlayers.at(0)) {
+			player.buyPowerplantCard(*cardBid, minimumBid);
+			break;
+		}
+	}
+
+	return (bidPlayers.at(0));
+}
+
+//Auction powerplants
+void Game::phase2() {
+	int choice;
+	vector<Player> playersNotDone = gamePlayers;
+	vector<Player>* gamePlayersPtr = &gamePlayers;
+	vector<Player>* playersPtr = &playersNotDone;
+	PowerplantCard* cardBid = nullptr;
+	while (!playersNotDone.empty()) {
+		Player player = playersNotDone.at(0);
+		choice = 0;
+		cout << "Powerplant cards on board: " << endl;
+		for (auto card : gameCards.getCardsOnBoard()) {
+			card.displayCard();
+		}
+		cout << endl;
+		while (choice != 1 and choice != 2) {
+			cout << "Player " << player.getColor() << " with " << player.getMoney() << " elektro choose action:" << endl;
+			cout << "1: Pass" << endl;
+			cout << "2: Auction" << endl;
+			cin >> choice;
+		}
+		if (choice == 2) {
+			//Select powerplant card
+			bool validCard = false;
+			while (!validCard) {
+				cout << "Enter the number of the card you want: ";
+				cin >> choice;
+				for (auto card : gameCards.getCardsOnBoard()) {
+					if (card.getNumber() == choice) {
+						if (card.getNumber() <= player.getMoney()) {
+							cardBid = &card;
+							validCard = true;
+							break;
+						}
+						else {
+							cout << "You don't have enough money." << endl;
+						}
+					}
+				}
+				if (!validCard) {
+					cout << "This is not a valid card." << endl;
+				}
+			}
+			Player winningBidder = bidPhase(playersPtr, cardBid, gamePlayersPtr);
+			updatePlayersNotDone(playersPtr, winningBidder);
+			gameCards.buyCard((*cardBid).getNumber());
+		}
+		else {
+			updatePlayersNotDone(playersPtr, player);
+		}
+	}
+	for (auto player : gamePlayers) {
+		cout << "Player " << player.getColor() << " has: ";
+		for (auto powerplantCard : player.getPowerplantCards()) {
+			cout << powerplantCard.getNumber() << " ";
+		}
+		cout << endl;
+	}
+}
+

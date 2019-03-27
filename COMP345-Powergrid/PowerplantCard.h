@@ -4,6 +4,7 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <iostream>
 #include "Resource.h"
 #include "Card.h"
 
@@ -22,6 +23,10 @@ public:
 	bool operator < (const PowerplantCard& p) const
 	{
 		return (number < p.number);
+	}
+
+	void displayCard() const {
+		std::cout << getNumber() << ": " << getResourceType() << " x" << getResourceQty() << " for " << getCities() << " city/cities" << std::endl;
 	}
 
 private:
