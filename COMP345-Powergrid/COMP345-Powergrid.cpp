@@ -161,4 +161,5 @@ int main()
 
 	Game game = Game();
 	game.start();
+	game.phase1();
 }

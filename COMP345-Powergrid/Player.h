@@ -32,6 +32,7 @@ public:
 	vector<City> getCities() const { return cities; }
 	vector<House> getHouses() const { return houses; }
 	SummaryCard getSummaryCard() const { return summaryCard; }
+	int getHighestPowerplantCardNumber() const { return highestPowerplantNumber; }
 
 	void addSummaryCard(SummaryCard card) { summaryCard = card; }
 	void addHouse(House h) { houses.push_back(h); }
@@ -41,9 +42,18 @@ public:
 
 	void displayResources() const;
 
+	bool operator < (const Player& p) const
+	{
+		if (cities.size() == p.getCities().size()) {
+			return highestPowerplantNumber < p.getHighestPowerplantCardNumber();
+		}
+		return (cities.size() < p.getCities().size());
+	}
+
 private:
 	string color;
 	int money;
+	int highestPowerplantNumber;
 	map<string, int> resources;
 	vector<House> houses;
 	vector<City> cities;

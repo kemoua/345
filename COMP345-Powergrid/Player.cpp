@@ -1,11 +1,12 @@
 #include "Player.h"
 #include <iostream>
+#include <algorithm>
 
 using std::cout;
 using std::endl;
 
 Player::Player() {}
-Player::Player(string color, int money) : color(color), money(money) {}
+Player::Player(string color, int money) : color(color), money(money), highestPowerplantNumber(0) {}
 Player::~Player() {}
 
 //TODO: add number of houses per player condition 
@@ -46,6 +47,9 @@ void Player::buyPowerplantCard(PowerplantCard p, int cost) {
 	}
 	else {
 		powerplantCards.push_back(p);
+		if (p.getNumber() > highestPowerplantNumber) {
+			highestPowerplantNumber = p.getNumber();
+		}
 		money -= cost;
 	}
 }
@@ -53,5 +57,14 @@ void Player::buyPowerplantCard(PowerplantCard p, int cost) {
 void Player::displayResources() const {
 	for (auto r : getResource()) {
 		cout << r.first << ": " << r.second << endl;
+	}
+}
+
+bool comparePowerplantCards(PowerplantCard& p1, PowerplantCard& p2) {
+	if (p1.getNumber() > p2.getNumber()) {
+		return true;
+	}
+	else {
+		return false;
 	}
 }

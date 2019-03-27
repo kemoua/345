@@ -12,6 +12,7 @@ using std::string;
 using std::cout;
 using std::endl;
 using std::vector;
+using std::sort;
 
 void Game::start() {
 	//Map loading
@@ -131,6 +132,21 @@ void Game::start() {
 	cout << "Cities available: ";
 	for (auto city : gameMap.getAvailableCities()) {
 		cout << city.getName() << " ";
+	}
+	cout << endl;
+}
+
+bool playerPriority(Player p1, Player p2) {
+	
+	return true;
+}
+
+//Determine new player order
+void Game::phase1() {
+	sort(gamePlayers.begin(), gamePlayers.end());
+	cout << "The player order is: " << endl;
+	for (auto player : gamePlayers) {
+		cout << player.getColor() << " ";
 	}
 	cout << endl;
 }
