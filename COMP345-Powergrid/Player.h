@@ -7,6 +7,8 @@
 #include <vector>
 #include <map>
 #include "City.h"
+#include "House.h"
+#include "SummaryCard.h"
 #include "Resource.h"
 #include "PowerplantCard.h"
 
@@ -28,7 +30,11 @@ public:
 	void setResource(Resource r, int q) { resources[r.getType()] = q; }
 	vector<PowerplantCard> getPowerplantCards() const { return powerplantCards; }
 	vector<City> getCities() const { return cities; }
+	vector<House> getHouses() const { return houses; }
+	SummaryCard getSummaryCard() const { return summaryCard; }
 
+	void addSummaryCard(SummaryCard card) { summaryCard = card; }
+	void addHouse(House h) { houses.push_back(h); }
 	void buyPowerplantCard(PowerplantCard p, int cost);
 	void buyResource(Resource r);
 	bool buyHouse(City c);
@@ -37,6 +43,8 @@ private:
 	string color;
 	int money;
 	map<string, int> resources;
+	vector<House> houses;
 	vector<City> cities;
 	vector<PowerplantCard> powerplantCards;
+	SummaryCard summaryCard;
 };

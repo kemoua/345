@@ -14,7 +14,7 @@ class MapLoader {
 public:
 	MapLoader() {}
 	~MapLoader() {}
-	void loadMap(std::string filename);
+	bool loadMap(std::string filename);
 	vector<Region> getRegions() { return regions; }
 	vector<City> getCities() { return cities; }
 	vector<Connection> getConnections() { return connections; }

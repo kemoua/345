@@ -4,6 +4,7 @@
 */
 #pragma once
 #include <vector>
+#include <map>
 #include  "Region.h"
 #include "City.h"
 #include "Connection.h"
@@ -22,6 +23,7 @@ public:
 	vector<Region> getRegions() const { return regions;  }
 	vector<City> getCities() const { return cities; }
 	vector<Connection> getConnections() const { return connections; }
+	vector<string> getRegionAdjacency(string regionName) const;
 
 	void displayConnectionsForCity(City c) const;
 

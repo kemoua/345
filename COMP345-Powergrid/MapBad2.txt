@@ -1,0 +1,123 @@
+1 Seattle
+1 Portland
+1 Boise
+1 Billings
+1 Cheyenne
+1 Denver
+1 Omaha
+2 San-Francisco
+2 Salt-Lake-City
+2 Las-Vegas
+2 Los-Angeles
+2 San-Diego
+2 Phoenix
+2 Santa-Fe
+3 Fargo
+3 Duluth
+3 Minneapolis
+3 Chicago
+3 St.-Louis
+3 Cincinnati
+3 Knoxville
+4 Detroit
+4 Buffalo
+4 Pittsburgh
+4 Washington-DC
+4 Boston
+4 New-York
+4 Philadelphia
+5 Norfolk
+5 Raleigh
+5 Atlanta
+5 Savannah
+5 Jacksonville
+5 Tampa
+5 Miami
+// Connections
+Seattle Portland 3
+Seattle Boise 12
+Seattle Billings 9
+Protland Boise 13
+Protland San-Francisco 24
+Boise Billings 12
+Boise Cheyenne 24
+Boise San-Francisco 23
+Boise Salt-Lake-City 8
+Billings Cheyenne 9
+Billings Fargo 17
+Billings Minneapolis 18
+Cheyenne Denver 0
+Cheyenne Omaha 14
+Cheyenne Minneapolis 18
+Denver Salt-Lake-City 21
+Denver Santa-Fe 13
+Denver Kansas-City 16
+Omaha Minneapolis 8
+Omaha Chicago 13
+Omaha Kansas-City 5
+San-Francisco Salt-Lake-City 27
+San-Francisco Las-Vegas 14
+San-Francisco Los-Angeles 9
+Salt-Lake-City Las-Vegas 18
+Salt-Lake-City Santa-Fe 28
+Las-Vegas Los-Angeles 9
+Las-Vegas San-Diego 9
+Las-Vegas Phoenix 15
+Las-Vegas Santa-Fe 27
+Los-Angeles San-Diego 3
+San-Diego Phoenix 14
+Phoenix Santa-Fe 18
+Santa-Fe Kansas-City 16
+Santa-Fe Oklahoma-City 15
+Santa-Fe Dallas 16
+Santa-Fe Houston 21
+Fargo Duluth 6
+Fargo Minneapolis 6
+Duluth Minneapolis 5
+Duluth Chicago 12
+Duluth Detroit 15
+Minneapolis Chicago 8
+Chicago St.-Louis 10
+Chicago Cincinnati 7
+Chicago Detroit 7
+Chicago Kansas-City 8
+St.-Louis Cincinnati 12
+St.-Louis Kansas-City 6
+St.-Louis Memphis 7
+St.-Louis Atlanta 12
+Cincinnati Knoxville 6
+Cincinnati Detroit 4
+Cincinnati Pittsburgh 7
+Cincinnati Raleigh 15
+Knoxville Atlanta 5
+Detroit Buffalo 7
+Detroit Pittsburgh 6
+Buffalo Pittsburgh 7
+Buffalo New-York 8
+Pittsburgh Washington-DC 6
+Pittsburgh Raleigh 7
+Washington-DC Philadelphia 3
+Washington-DC Norfolk 5
+Boston New-York 3
+New-York Philadelphia 0
+Norfolk Raleigh 3
+Raleigh Atlanta 7
+Raleigh Savannah 7
+Atlanta Savannah 7
+Atlanta Birmingham 3
+Savannah Jacksonville 0
+Jacksonville Tampa 4
+Jacksonville Birmingham 9
+Jacksonville New-Orleans 16
+Tampa Miami 4
+Kansas-City Oklahoma-City 8
+Kansas-City Memphis 12
+Oklahoma-City Dallas 3
+Oklahoma-City Memphis 14
+Memphis Dallas 12
+Memphis New-Orleans 7
+Memphis Birmingham 6
+Dallas Houston 5
+Dallas New-Orleans 12
+Houston New-Orleans 8
+New-Orleans Birmingham 11

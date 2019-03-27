@@ -187,8 +187,10 @@
     <ClCompile Include="ResourceSetup.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="MapBad2.txt" />
     <Text Include="MapUSA.txt" />
     <Text Include="PowerplantCards.txt" />
+    <Text Include="MapBad1.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

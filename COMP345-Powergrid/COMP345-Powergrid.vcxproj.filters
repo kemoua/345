@@ -112,5 +112,11 @@
     <Text Include="PowerplantCards.txt">
       <Filter>Resource Files\Cards</Filter>
     </Text>
+    <Text Include="MapBad1.txt">
+      <Filter>Resource Files\Maps</Filter>
+    </Text>
+    <Text Include="MapBad2.txt">
+      <Filter>Resource Files\Maps</Filter>
+    </Text>
   </ItemGroup>
 </Project>
