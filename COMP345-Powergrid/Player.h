@@ -39,6 +39,8 @@ public:
 	void buyResource(Resource r);
 	bool buyHouse(City c);
 
+	void displayResources() const;
+
 private:
 	string color;
 	int money;

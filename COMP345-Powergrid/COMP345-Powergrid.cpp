@@ -179,7 +179,7 @@ void part1() {
 		}
 		cin.clear();
 	}
-	Map m = Map(loader.getRegions(), loader.getCities(), loader.getConnections());
+	Map gameMap = Map(loader.getRegions(), loader.getCities(), loader.getConnections());
 	loader.~MapLoader();
 
 	//Resources and cards loading
@@ -187,7 +187,7 @@ void part1() {
 	CardDriver cd = CardDriver();
 
 	//Players
-	vector<Player> players;
+	vector<Player> gamePlayers;
 	Color colors;
 	cout << "Enter number of players: ";
 	cin >> input;
@@ -208,10 +208,12 @@ void part1() {
 			p.addHouse(House(currentColor));
 		}
 		p.addSummaryCard(summaryCard);
-		players.push_back(p);
+		gamePlayers.push_back(p);
 	}
-	for (auto p : players) {
-		cout << p.getColor() << ", Number of houses: " << p.getHouses().size() << endl;
+	for (auto p : gamePlayers) {
+		cout << p.getColor() << ", number of houses: " << p.getHouses().size();
+		cout << ", elektro: " << p.getMoney() << endl;
+		p.displayResources(); //display nothing since the player has no resources at the start of the game
 		cout << p.getSummaryCard().getPlayOrder() << endl;
 	}
 	cout << endl;
@@ -236,12 +238,12 @@ void part1() {
 	while (count < maxNumberRegions) {
 		cout << "Please select a region between: ";
 		if (count == 0) {
-			for (auto rg : m.getRegions()) {
+			for (auto rg : gameMap.getRegions()) {
 				cout << rg.getName() << " ";
 			}
 		}
 		else {
-			for (auto r : m.getRegionAdjacency(regionChoice)) {
+			for (auto r : gameMap.getRegionAdjacency(regionChoice)) {
 				if (!(std::find(regionsChosen.begin(), regionsChosen.end(), r) != regionsChosen.end())) {
 					cout << r << " ";
 				}
@@ -256,15 +258,15 @@ void part1() {
 		regionsChosen.push_back(regionChoice);
 		count++;
 	}
-	m.setAvailableRegionsAndCities(regionsChosen);
+	gameMap.setAvailableRegionsAndCities(regionsChosen);
 	//Display available regions and cities for players
 	cout << "Regions available: ";
-	for (auto region : m.getAvailableRegions()) {
+	for (auto region : gameMap.getAvailableRegions()) {
 		cout << region.getName() << " ";
 	}
 	cout << endl;
 	cout << "Cities available: ";
-	for (auto city : m.getAvailableCities()) {
+	for (auto city : gameMap.getAvailableCities()) {
 		cout << city.getName() << " ";
 	}
 	cout << endl;

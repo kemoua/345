@@ -49,3 +49,9 @@ void Player::buyPowerplantCard(PowerplantCard p, int cost) {
 		money -= cost;
 	}
 }
+
+void Player::displayResources() const {
+	for (auto r : getResource()) {
+		cout << r.first << ": " << r.second << endl;
+	}
+}
