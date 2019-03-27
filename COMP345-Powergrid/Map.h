@@ -24,11 +24,16 @@ public:
 	vector<City> getCities() const { return cities; }
 	vector<Connection> getConnections() const { return connections; }
 	vector<string> getRegionAdjacency(string regionName) const;
+	vector<Region> getAvailableRegions() const { return availableRegions; }
+	vector<City> getAvailableCities() const { return availableCities; }
 
+	void setAvailableRegionsAndCities(vector<string> regionsChoice);
 	void displayConnectionsForCity(City c) const;
 
 private:
 	vector<Region> regions;
 	vector<City> cities;
 	vector<Connection> connections;
+	vector<Region> availableRegions;
+	vector<City> availableCities;
 };

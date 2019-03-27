@@ -62,3 +62,16 @@ vector<string> Map::getRegionAdjacency(string regionName) const {
 	}
 	return adj;
 }
+
+void Map::setAvailableRegionsAndCities(vector<string> regionsChoice) {
+	for (auto regionName : regionsChoice) {
+		for (auto region : regions) {
+			if (region.getName() == regionName) {
+				availableRegions.push_back(region);
+				for (auto city : region.getCities()) {
+					availableCities.push_back(city);
+				}
+			}
+		}
+	}
+}

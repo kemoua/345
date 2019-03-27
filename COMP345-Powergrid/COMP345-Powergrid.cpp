@@ -256,7 +256,18 @@ void part1() {
 		regionsChosen.push_back(regionChoice);
 		count++;
 	}
-
+	m.setAvailableRegionsAndCities(regionsChosen);
+	//Display available regions and cities for players
+	cout << "Regions available: ";
+	for (auto region : m.getAvailableRegions()) {
+		cout << region.getName() << " ";
+	}
+	cout << endl;
+	cout << "Cities available: ";
+	for (auto city : m.getAvailableCities()) {
+		cout << city.getName() << " ";
+	}
+	cout << endl;
 
 	system("pause");
 }
