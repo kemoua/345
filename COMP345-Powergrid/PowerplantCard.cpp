@@ -35,11 +35,13 @@ void PowerplantCard::displayCard() const {
 	std::cout << number << ": " << resourceType << " x" << resourceQty << " for " << cities << " city/cities" << std::endl;
 }
 
-void PowerplantCard::removeAlimentingResources() {
+vector<Resource> PowerplantCard::removeAlimentingResources() {
+	vector<Resource> removedResources;
 	if (alimented) {
 		int i = 0;
 		for (auto it = availableResources.begin(); it != availableResources.end();) {
 			if (availableResources.size() != 0 && i < availableResources.size()) {
+				removedResources.push_back((*it));
 				it = availableResources.erase(it);
 				i++;
 			}
@@ -48,4 +50,5 @@ void PowerplantCard::removeAlimentingResources() {
 			}
 		}
 	}
+	return removedResources;
 }

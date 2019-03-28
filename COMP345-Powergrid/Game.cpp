@@ -367,6 +367,7 @@ void Game::phase3() {
 					for (int i = 0; i < qtyChoice; i++) {
 						Resource r = Resource(gameResources.getNextResource(resourceChoice));
 						gameResources.removeResource(resourceChoice, 1);
+						gameResources.removeResourceTotal(resourceChoice, 1);
 						int index = 0;
 						for (auto& pc : pcs) {
 							if (index == (cardChoice - 1)) {
@@ -533,6 +534,7 @@ void Game::phase5() {
 	}
 	cout << endl;
 
+	vector<Resource> removedResources;
 	for (vector<Player>::iterator player = gamePlayers.begin(); player != gamePlayers.end(); ++player) {
 		//Earn money
 		//First, calculate number of owned alimented cities 
@@ -541,7 +543,10 @@ void Game::phase5() {
 		for (auto& pc : pcs) {
 			if (pc.isAlimented()) {
 				alimentedCities++;
-				pc.removeAlimentingResources();
+				vector<Resource> rs = pc.removeAlimentingResources();
+				for (auto& r : rs) {
+					removedResources.push_back(r);
+				}
 			}
 		}
 		(*player).updatePowerplantCards(pcs);
@@ -553,6 +558,9 @@ void Game::phase5() {
 		cout << "Player  " << (*player).getColor() << " earned " << moneyEarned << " elektro." << endl;
 	}
 
+	//Resupply market
+	gameResources.resupply(gamePlayers.size(), gameStep);
+
 	//Display possession of each player
 	for (auto p : gamePlayers) {
 		cout << p.getColor() << ": " << p.getMoney() << " elektro. Powerplant Cards:" << endl;
@@ -561,5 +569,18 @@ void Game::phase5() {
 			cout << "    " << ppc.getAvailableResources().size() << endl;
 		}
 		cout << endl;
+	}
+
+	//Display resources removed from powerplants and add them back to the total number of resources available
+	for (auto r : removedResources) {
+		cout << r.getType() << " ";
+		gameResources.addResourceTotal(r.getType(), 1);
+	}
+	cout << endl;
+
+	//Display resources on board
+	cout << "Resources on board: " << endl;
+	for (auto rb : gameResources.getResourcesOnBoard()) {
+		cout << rb.first << ": " << rb.second << endl;
 	}
 }

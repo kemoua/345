@@ -27,7 +27,11 @@ public:
 	Resource getNextResource(string type);
 	void addResource(string type, int qty);
 	void removeResource(string type, int qty);
+	void addResourceTotal(string type, int qty);
+	int removeResourceTotal(string type, int qty);
 	int getPrice(string resourceType, int qty) const;
+
+	void resupply(int numberOfPlayers, int step);
 
 private:
 	map<string, int> houses;

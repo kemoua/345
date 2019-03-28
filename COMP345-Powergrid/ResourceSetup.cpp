@@ -13,10 +13,10 @@ ResourceSetup::ResourceSetup() {
 		houses[Color::getColor(i)] = 22;
 	}
 
-	resourcesTotal["coal"] = 24;
-	resourcesTotal["oil"] = 24;
-	resourcesTotal["garbage"] = 24;
-	resourcesTotal["uranium"] = 12;
+	resourcesTotal["coal"] = 0;
+	resourcesTotal["oil"] = 6;
+	resourcesTotal["garbage"] = 18;
+	resourcesTotal["uranium"] = 10;
 
 	resourcesOnBoard["coal"] = 24;
 	resourcesOnBoard["oil"] = 18;
@@ -69,7 +69,13 @@ Resource ResourceSetup::getNextResource(string resourceType) {
 
 //Add resource on the board
 void ResourceSetup::addResource(string type, int qty) {
-	resourcesOnBoard[type] += qty;
+	for (int i = 0; i < qty; i++) {
+		if (resourcesTotal[type] == 0) {
+			break;
+		}
+		resourcesOnBoard[type]++;
+		resourcesTotal[type]--;
+	}
 	updateCheapestPrice(type);
 }
 
@@ -77,6 +83,26 @@ void ResourceSetup::addResource(string type, int qty) {
 void ResourceSetup::removeResource(string type, int qty) {
 	resourcesOnBoard[type] -= qty;
 	updateCheapestPrice(type);
+}
+
+//Add resource to the total
+void ResourceSetup::addResourceTotal(string type, int qty) {
+	resourcesTotal[type] += qty;
+}
+
+//Remove resource from total
+int ResourceSetup::removeResourceTotal(string type, int qty) {
+	int removed = 0;
+	for (int i = 0; i < qty; i++) {
+		if (resourcesTotal[type] == 0) {
+			removed = i;
+			break;
+		}
+		else {
+			resourcesTotal[type]--;
+		}
+	}
+	return (qty - removed);
 }
 
 //Return the minimum total cost of a quantity of a resource
@@ -103,4 +129,119 @@ int ResourceSetup::getPrice(string resourceType, int qty) const{
 		}
 	}
 	return totalPrice;
+}
+
+void ResourceSetup::resupply(int nP, int step) {
+	switch (nP) {
+	case 2:
+		switch (step) {
+		case 1:
+			addResource("coal", 3);
+			addResource("oil", 2);
+			addResource("garbage", 1);
+			addResource("uranium", 1);
+			break;
+		case 2:
+			addResource("coal", 4);
+			addResource("oil", 2);
+			addResource("garbage", 2);
+			addResource("uranium", 1);
+			break;
+		case 3:
+			addResource("coal", 3);
+			addResource("oil", 4);
+			addResource("garbage", 3);
+			addResource("uranium", 1);
+			break;
+		}
+		break;
+	case 3:
+		switch (step) {
+		case 1:
+			addResource("coal", 4);
+			addResource("oil", 2);
+			addResource("garbage", 1);
+			addResource("uranium", 1);
+			break;
+		case 2:
+			addResource("coal", 5);
+			addResource("oil", 3);
+			addResource("garbage", 2);
+			addResource("uranium", 1);
+			break;
+		case 3:
+			addResource("coal", 3);
+			addResource("oil", 4);
+			addResource("garbage", 3);
+			addResource("uranium", 1);
+			break;
+		}
+		break;
+	case 4:
+		switch (step) {
+		case 1:
+			addResource("coal", 5);
+			addResource("oil", 3);
+			addResource("garbage", 2);
+			addResource("uranium", 1);
+			break;
+		case 2:
+			addResource("coal", 6);
+			addResource("oil", 4);
+			addResource("garbage", 3);
+			addResource("uranium", 2);
+			break;
+		case 3:
+			addResource("coal", 4);
+			addResource("oil", 5);
+			addResource("garbage", 4);
+			addResource("uranium", 2);
+			break;
+		}
+		break;
+	case 5:
+		switch (step) {
+		case 1:
+			addResource("coal", 5);
+			addResource("oil", 4);
+			addResource("garbage", 3);
+			addResource("uranium", 2);
+			break;
+		case 2:
+			addResource("coal", 7);
+			addResource("oil", 5);
+			addResource("garbage", 3);
+			addResource("uranium", 3);
+			break;
+		case 3:
+			addResource("coal", 5);
+			addResource("oil", 6);
+			addResource("garbage", 5);
+			addResource("uranium", 2);
+			break;
+		}
+		break;
+	case 6:
+		switch (step) {
+		case 1:
+			addResource("coal", 7);
+			addResource("oil", 5);
+			addResource("garbage", 3);
+			addResource("uranium", 2);
+			break;
+		case 2:
+			addResource("coal", 9);
+			addResource("oil", 6);
+			addResource("garbage", 5);
+			addResource("uranium", 3);
+			break;
+		case 3:
+			addResource("coal", 6);
+			addResource("oil", 7);
+			addResource("garbage", 6);
+			addResource("uranium", 3);
+			break;
+		}
+		break;
+	}
 }
