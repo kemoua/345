@@ -38,7 +38,7 @@ public:
 	void addHouse(House h) { houses.push_back(h); }
 	void buyPowerplantCard(PowerplantCard p, int cost);
 	void buyResource(Resource r);
-	bool buyHouse(City c);
+	bool buyHouse(City c, int connectionPrice);
 	void updatePowerplantCards(vector<PowerplantCard> pcs);
 
 	void displayResources() const;

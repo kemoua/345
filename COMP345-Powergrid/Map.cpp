@@ -89,3 +89,18 @@ void Map::updateAvailableCities(vector<City> cities) {
 	availableCities.clear();
 	availableCities = cities;
 }
+
+int Map::getConnectionCost(City c1, City c2) const {
+	int cost = -1;
+	for (auto c : connections) {
+		if (c.getStartCity().getName() == c1.getName() && c.getEndCity().getName() == c2.getName()) {
+			cost = c.getCost();
+			break;
+		}
+		if (c.getStartCity().getName() == c2.getName() && c.getEndCity().getName() == c1.getName()) {
+			cost = c.getCost();
+			break;
+		}
+	}
+	return cost;
+}

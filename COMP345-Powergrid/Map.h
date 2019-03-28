@@ -26,6 +26,7 @@ public:
 	vector<string> getRegionAdjacency(vector<string> regionsName) const;
 	vector<Region> getAvailableRegions() const { return availableRegions; }
 	vector<City> getAvailableCities() const { return availableCities; }
+	int getConnectionCost(City c1, City c2) const;
 
 	void updateAvailableCities(vector<City> cities);
 	void setAvailableRegionsAndCities(vector<string> regionsChoice);

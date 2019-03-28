@@ -10,10 +10,10 @@ Player::Player(string color, int money) : color(color), money(money), highestPow
 Player::~Player() {}
 
 //TODO: add number of houses per player condition 
-bool Player::buyHouse(City c) {
+bool Player::buyHouse(City c, int connectionPrice) {
 	cout << "buying " << c.getName() << endl;
 	int houseNumber = c.getHouses().size();
-	int houseCost = c.getCost();
+	int houseCost = c.getCost() + connectionPrice;
 	if (houseNumber == 3) {
 		cout << "Can't build in this city anymore." << endl;
 	}

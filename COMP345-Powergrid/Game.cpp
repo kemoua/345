@@ -447,7 +447,24 @@ void Game::phase4() {
 		bool bought = false;
 		while (!bought) {
 			City chosenCity = availableCities.at(cityChoice - 1);
-			if ((*player).buyHouse(chosenCity)) {
+			int connectionCost = 0;
+			int bestCost = -1;
+			//Get lowest connection cost
+			if ((*player).getCities().size() > 0) {
+				connectionCost = -1;
+				for (auto pcity : (*player).getCities()) {
+					bestCost = gameMap.getConnectionCost(chosenCity, pcity);
+					if (connectionCost == -1) {
+						connectionCost = bestCost;
+					}
+					if (bestCost != -1 && bestCost < connectionCost) {
+						connectionCost = bestCost;
+					}
+				}
+			}
+			//Try to buy house in city
+			cout << "The lowest connection cost is: " << connectionCost << endl;
+			if ((*player).buyHouse(chosenCity, connectionCost)) {
 				vector<City> c = gameMap.getAvailableCities();
 				for (auto& city : c) {
 					if (chosenCity.getName() == city.getName()) {
@@ -467,9 +484,9 @@ void Game::phase4() {
 			}
 		}
 	}
-
+	//Display possession of each player
 	for (auto p : gamePlayers) {
-		cout << p.getColor() << ": ";
+		cout << p.getColor() << ": " << p.getMoney() << " elektro left, cities: ";
 		for (auto c : p.getCities()) {
 			cout << c.getName() << " ";
 		}
