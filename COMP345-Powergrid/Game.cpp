@@ -441,18 +441,31 @@ void Game::phase4() {
 			index++;
 		}
 		cin >> cityChoice; //TODO: Add validation
-		City chosenCity = availableCities.at(cityChoice - 1);
-		vector<City> c = gameMap.getAvailableCities();
-		for (auto& city : c) {
-			if (chosenCity.getName() == city.getName()) {
-				cout << "Adding house" << endl;
-				city.addHouse(House((*player).getColor()));
-				break;
+		if (cityChoice == 0) {
+			continue;
+		}
+		bool bought = false;
+		while (!bought) {
+			City chosenCity = availableCities.at(cityChoice - 1);
+			if ((*player).buyHouse(chosenCity)) {
+				vector<City> c = gameMap.getAvailableCities();
+				for (auto& city : c) {
+					if (chosenCity.getName() == city.getName()) {
+						city.addHouse(House((*player).getColor()));
+						break;
+					}
+				}
+				gameMap.updateAvailableCities(c);
+				bought = true;
+			}
+			else {
+				cout << "Choose another city: ";
+				cin >> cityChoice;
+				if (cityChoice == 0) {
+					bought = true;
+				}
 			}
 		}
-		(*player).buyHouse(chosenCity);
-		gameMap.updateAvailableCities(c);
-
 	}
 
 	for (auto p : gamePlayers) {
