@@ -494,3 +494,72 @@ void Game::phase4() {
 	}
 }
 
+int getPayment(int numberOfCities) {
+	switch (numberOfCities) {
+	case 0: return 10;
+	case 1: return 22;
+	case 2: return 33;
+	case 3: return 44;
+	case 4: return 54;
+	case 5: return 64;
+	case 6: return 73;
+	case 7: return 82;
+	case 8: return 90;
+	case 9: return 98;
+	case 10: return 105;
+	case 11: return 112;
+	case 12: return 118;
+	case 13: return 124;
+	case 14: return 129;
+	case 15: return 134;
+	case 16: return 138;
+	case 17: return 142;
+	case 18: return 145;
+	case 19: return 148;
+	case 20: return 150;
+	}
+}
+
+//Bureaucracy
+void Game::phase5() {
+	cout << "**************************************************" << endl;
+	cout << "****                PHASE 5                   ****" << endl;
+	cout << "**************************************************" << endl;
+
+	//Display the play order
+	cout << "Player order: ";
+	for (vector<Player>::iterator player = gamePlayers.begin(); player != gamePlayers.end(); ++player) {
+		cout << (*player).getColor() << " ";
+	}
+	cout << endl;
+
+	for (vector<Player>::iterator player = gamePlayers.begin(); player != gamePlayers.end(); ++player) {
+		//Earn money
+		//First, calculate number of owned alimented cities 
+		int alimentedCities = 0;
+		vector<PowerplantCard> pcs = (*player).getPowerplantCards();
+		for (auto& pc : pcs) {
+			if (pc.isAlimented()) {
+				alimentedCities++;
+				pc.removeAlimentingResources();
+			}
+		}
+		(*player).updatePowerplantCards(pcs);
+		if ((*player).getCities().size() < alimentedCities) {
+			alimentedCities = (*player).getCities().size();
+		}
+		int moneyEarned = getPayment(alimentedCities);
+		(*player).getPayment(moneyEarned);
+		cout << "Player  " << (*player).getColor() << " earned " << moneyEarned << " elektro." << endl;
+	}
+
+	//Display possession of each player
+	for (auto p : gamePlayers) {
+		cout << p.getColor() << ": " << p.getMoney() << " elektro. Powerplant Cards:" << endl;
+		for (auto ppc : p.getPowerplantCards()) {
+			ppc.displayCard();
+			cout << "    " << ppc.getAvailableResources().size() << endl;
+		}
+		cout << endl;
+	}
+}

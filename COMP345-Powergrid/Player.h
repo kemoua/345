@@ -42,6 +42,7 @@ public:
 	void updatePowerplantCards(vector<PowerplantCard> pcs);
 
 	void displayResources() const;
+	void getPayment(int payment) { money += payment; }
 
 	bool operator < (const Player& p) const
 	{

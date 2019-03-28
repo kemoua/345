@@ -24,6 +24,7 @@ public:
 	bool isAlimented() const { return alimented; }
 	void addAvailableResource(Resource r);
 	int reallocateResource(string resourceName, int quantity);
+	void removeAlimentingResources();
 
 	bool operator < (const PowerplantCard& p) const
 	{
