@@ -9,7 +9,7 @@ using std::vector;
 
 class Game {
 public:
-	Game() {}
+	Game() : gameStep(1) {}
 	~Game() {}
 	void start();
 	void phase1();
@@ -23,4 +23,5 @@ private:
 	vector<Player> gamePlayers;
 	ResourceSetup gameResources;
 	CardDriver gameCards;
+	int gameStep;
 };

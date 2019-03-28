@@ -79,3 +79,8 @@ void Map::setAvailableRegionsAndCities(vector<string> regionsChoice) {
 		}
 	}
 }
+
+void Map::updateAvailableCities(vector<City> cities) {
+	availableCities.clear();
+	availableCities = cities;
+}

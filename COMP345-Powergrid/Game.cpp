@@ -296,6 +296,15 @@ void Game::phase2() {
 	}
 }
 
+void displayOwnedPCards(Player player) {
+	int position = 1;
+	for (auto pCard : player.getPowerplantCards()) {
+		cout << position << "- (has " << pCard.getAvailableResources().size() << " resources on it) ";
+		pCard.displayCard();
+		position++;
+	}
+}
+
 //Buy resources
 void Game::phase3() {
 	cout << "**************************************************" << endl;
@@ -316,14 +325,13 @@ void Game::phase3() {
 		}
 		else {
 			bool buyingResources = true;
+			//
+			//Buying resources phase
+			//
 			while (buyingResources) {
-				int position = 1;
+				cout << "****    Player " << (*player).getColor() << "    ****" << endl;
 				//Display list of powerplants owned by player
-				for (auto pCard : (*player).getPowerplantCards()) {
-					cout << position << "- (can buy " << (2 * pCard.getResourceQty() - pCard.getAvailableResources().size()) << " more resources) ";
-					pCard.displayCard();
-					position++;
-				}
+				displayOwnedPCards(*player);
 				int cardChoice = -1;
 				while (cardChoice < 0 || cardChoice >(*player).getPowerplantCards().size()) {
 					cout << "Enter card for which you want to buy resources: ";
@@ -331,6 +339,11 @@ void Game::phase3() {
 				}
 				//Input 0 when done
 				if (cardChoice == 0) {
+					//
+					//TODO: Reallocating resources
+					//
+					displayOwnedPCards(*player);
+
 					buyingResources = false;
 					break;
 				}
@@ -370,6 +383,64 @@ void Game::phase3() {
 			}
 		}
 
+	}
+}
+
+//Return list of cities where the player can build a house in
+vector<City> getAvailableCities(Player player, vector<City> cities, int step) {
+	vector<City> availableCities;
+	for (City& city : cities) {
+		if (city.getHouses().size() < step) {
+			availableCities.push_back(city);
+		}
+	}
+	return availableCities;
+}
+
+//Building
+void Game::phase4() {
+	cout << "**************************************************" << endl;
+	cout << "****                PHASE 4                   ****" << endl;
+	cout << "**************************************************" << endl;
+	//Display the play order
+	cout << "Player order: ";
+	for (vector<Player>::reverse_iterator it = gamePlayers.rbegin(); it != gamePlayers.rend(); ++it) {
+		cout << (*it).getColor() << " ";
+	}
+	cout << endl;
+
+	for (vector<Player>::reverse_iterator player = gamePlayers.rbegin(); player != gamePlayers.rend(); ++player) {
+		cout << "****    Player " << (*player).getColor() << "    ****" << endl;
+		cout << "Choose a city:" << endl;
+		int index = 1;
+		int cityChoice;
+		vector<City> availableCities = getAvailableCities(*player, gameMap.getAvailableCities(), gameStep);
+		//Player choose city to buy a house in
+		for (auto city : availableCities) {
+			cout << index << ": " << city.getName() << " (has " << city.getHouses().size() << " house(s))" << endl;
+			index++;
+		}
+		cin >> cityChoice; //TODO: Add validation
+		City chosenCity = availableCities.at(cityChoice - 1);
+		vector<City> c = gameMap.getAvailableCities();
+		for (auto& city : c) {
+			if (chosenCity.getName() == city.getName()) {
+				cout << "Adding house" << endl;
+				city.addHouse(House((*player).getColor()));
+				break;
+			}
+		}
+		(*player).buyHouse(chosenCity);
+		gameMap.updateAvailableCities(c);
+
+	}
+
+	for (auto p : gamePlayers) {
+		cout << p.getColor() << ": ";
+		for (auto c : p.getCities()) {
+			cout << c.getName() << " ";
+		}
+		cout << endl;
 	}
 }
 

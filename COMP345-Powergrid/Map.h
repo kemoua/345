@@ -27,6 +27,7 @@ public:
 	vector<Region> getAvailableRegions() const { return availableRegions; }
 	vector<City> getAvailableCities() const { return availableCities; }
 
+	void updateAvailableCities(vector<City> cities);
 	void setAvailableRegionsAndCities(vector<string> regionsChoice);
 	void displayConnectionsForCity(City c) const;
 

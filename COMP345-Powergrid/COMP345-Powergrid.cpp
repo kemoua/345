@@ -163,7 +163,8 @@ int main()
 	game.start();
 	while (true) {
 		game.phase1();
-		game.phase2();
-		game.phase3();
+		//game.phase2();
+		//game.phase3();
+		game.phase4();
 	}
 }
