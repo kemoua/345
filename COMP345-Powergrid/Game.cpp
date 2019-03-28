@@ -561,6 +561,9 @@ void Game::phase5() {
 	//Resupply market
 	gameResources.resupply(gamePlayers.size(), gameStep);
 
+	//Discard random card and draw another one
+	gameCards.removeCardRandomly();
+
 	//Display possession of each player
 	for (auto p : gamePlayers) {
 		cout << p.getColor() << ": " << p.getMoney() << " elektro. Powerplant Cards:" << endl;

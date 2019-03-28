@@ -18,6 +18,7 @@ public:
 	void drawCard();
 	bool buyCard(int number);
 	void viewSummary() const;
+	void removeCardRandomly();
 
 private:
 	vector<PowerplantCard> cards;

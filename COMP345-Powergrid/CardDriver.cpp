@@ -84,6 +84,21 @@ bool CardDriver::buyCard(int number) {
 	return false;
 }
 
+void CardDriver::removeCardRandomly() {
+	std::srand(time(0));
+	std::random_shuffle(std::begin(cardsOnBoard), std::end(cardsOnBoard));
+	vector<PowerplantCard>::iterator it;
+	//Remove the first card on the board after shuffling them randomly
+	int index = 0;
+	for (it = cardsOnBoard.begin(); it != cardsOnBoard.end(); ++it) {
+		if (index == 0) {
+			cardsOnBoard.erase(it);
+			drawCard();
+			break;
+		}
+	}
+}
+
 //Simple display of the content of the summary card
 void CardDriver::viewSummary() const {
 	cout << summary.getPaymentOrder() << endl;
