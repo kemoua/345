@@ -30,3 +30,7 @@ int PowerplantCard::reallocateResource(string resourceName, int quantity) {
 	alimented = (availableResources.size() >= resourceQty);
 	return q;
 }
+
+void PowerplantCard::displayCard() const {
+	std::cout << number << ": " << resourceType << " x" << resourceQty << " for " << cities << " city/cities" << std::endl;
+}

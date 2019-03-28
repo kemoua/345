@@ -15,6 +15,7 @@ public:
 	PowerplantCard() {}
 	PowerplantCard(int number, string resourceType, int resourceQty, int cities) : number(number), resourceType(resourceType), resourceQty(resourceQty), cities(cities), alimented(false) {};
 
+	void setResourceType(string s) { resourceType = s; }
 	int getNumber() const { return number; }
 	string getResourceType() const { return resourceType; }
 	int getResourceQty() const { return resourceQty; }
@@ -29,9 +30,7 @@ public:
 		return (number < p.number);
 	}
 
-	void displayCard() const {
-		std::cout << getNumber() << ": " << getResourceType() << " x" << getResourceQty() << " for " << getCities() << " city/cities" << std::endl;
-	}
+	void displayCard() const;
 
 private:
 	int number; //The number of the card

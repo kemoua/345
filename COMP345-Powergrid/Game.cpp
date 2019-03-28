@@ -163,7 +163,7 @@ void updatePlayersNotDone(vector<Player>* playersPtr, Player p) {
 	}
 }
 
-Player bidPhase(vector<Player>* playersNotDone, PowerplantCard* cardBid, vector<Player>* gamePlayersPtr) {
+Player bidPhase(vector<Player>* playersNotDone, PowerplantCard* cardBid, vector<Player>* gamePlayersPtr, string rt) {
 	vector<Player> bidPlayers = *playersNotDone;
 	vector<Player>* bidPlayersPtr = &bidPlayers;
 	bool bid = true;
@@ -220,6 +220,7 @@ Player bidPhase(vector<Player>* playersNotDone, PowerplantCard* cardBid, vector<
 		}
 	}
 	//Player winning the bid gets the card
+	(*cardBid).setResourceType(rt);
 	for (Player& player : *gamePlayersPtr) {
 		if (player == bidPlayers.at(0)) {
 			player.buyPowerplantCard(*cardBid, minimumBid);
@@ -236,6 +237,7 @@ void Game::phase2() {
 	cout << "****                PHASE 2                   ****" << endl;
 	cout << "**************************************************" << endl;
 	int choice;
+	string resourceType;
 	vector<Player> playersNotDone = gamePlayers;
 	vector<Player>* gamePlayersPtr = &gamePlayers;
 	vector<Player>* playersPtr = &playersNotDone;
@@ -263,6 +265,7 @@ void Game::phase2() {
 				for (auto card : gameCards.getCardsOnBoard()) {
 					if (card.getNumber() == choice) {
 						if (card.getNumber() <= player.getMoney()) {
+							resourceType = card.getResourceType();
 							cardBid = &card;
 							validCard = true;
 							break;
@@ -276,7 +279,7 @@ void Game::phase2() {
 					cout << "This is not a valid card." << endl;
 				}
 			}
-			Player winningBidder = bidPhase(playersPtr, cardBid, gamePlayersPtr);
+			Player winningBidder = bidPhase(playersPtr, cardBid, gamePlayersPtr, resourceType);
 			updatePlayersNotDone(playersPtr, winningBidder);
 			gameCards.buyCard((*cardBid).getNumber());
 		}
