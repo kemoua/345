@@ -14,6 +14,57 @@ using std::endl;
 using std::vector;
 using std::sort;
 
+//Determine winner
+void Game::triggerEnd() {
+	int currentIndex = 0;
+	int winnerIndex = 0;
+	int maxCitiesPowered = 0;
+	int maxRemainingMoney = 0;
+	int maxCities = 0;
+	for (auto& player : gamePlayers) {
+		int alimentedCities = 0;
+		//Get total number of powered cities owned
+		for (auto& pc : player.getPowerplantCards()) {
+			if (pc.isAlimented()) {
+				alimentedCities += pc.getCities();
+			}
+		}
+		if (player.getCities().size() < alimentedCities) {
+			alimentedCities = player.getCities().size();
+		}
+		//Compare number of powered cities
+		if (alimentedCities > maxCitiesPowered) {
+			winnerIndex = currentIndex;
+			maxCitiesPowered = alimentedCities;
+			maxRemainingMoney = player.getMoney();
+			maxCities = player.getCities().size();
+		}
+		if (alimentedCities == maxCitiesPowered) {
+			//Compare number of remaining money
+			if (player.getMoney() > maxRemainingMoney) {
+				winnerIndex = currentIndex;
+				maxCitiesPowered = alimentedCities;
+				maxRemainingMoney = player.getMoney();
+				maxCities = player.getCities().size();
+			}
+			if (player.getMoney() == maxRemainingMoney) {
+				//Compare number of cities
+				if (player.getCities().size() > maxCities) {
+					winnerIndex = currentIndex;
+					maxCitiesPowered = alimentedCities;
+					maxRemainingMoney = player.getMoney();
+					maxCities = player.getCities().size();
+				}
+			}
+		}
+		currentIndex++;
+	}
+	//Winner found
+	Player winner = gamePlayers.at(winnerIndex);
+
+	//TODO: Display winner. End Game properly.
+}
+
 void Game::start() {
 	//Map loading
 	vector<string> maps = { "MapUSA.txt", "MapBad1.txt", "MapBad2.txt" };
@@ -107,6 +158,7 @@ void Game::start() {
 			}
 		}
 		else {
+			//Add adjacent regions to the list of possible regions to choose
 			for (auto r : gameMap.getRegionAdjacency(regionsChosen)) {
 				if (!(std::find(regionsChosen.begin(), regionsChosen.end(), r) != regionsChosen.end())) {
 					cout << r << " ";
@@ -122,7 +174,9 @@ void Game::start() {
 		regionsChosen.push_back(regionChoice);
 		count++;
 	}
+	//Update the list of available cities depending on the regions chosen
 	gameMap.setAvailableRegionsAndCities(regionsChosen);
+
 	//Display available regions and cities for players
 	cout << "Regions available: ";
 	for (auto region : gameMap.getAvailableRegions()) {
@@ -151,6 +205,7 @@ void Game::phase1() {
 	cout << "**************************************************" << endl;
 }
 
+//Helper method
 void updatePlayersNotDone(vector<Player>* playersPtr, Player p) {
 	for (auto it = (*playersPtr).begin(); it != (*playersPtr).end();) {
 		if (*it == p ) {
@@ -163,11 +218,12 @@ void updatePlayersNotDone(vector<Player>* playersPtr, Player p) {
 	}
 }
 
+//Helper method to handle the bidding phase
 Player bidPhase(vector<Player>* playersNotDone, PowerplantCard* cardBid, vector<Player>* gamePlayersPtr, string rt) {
-	vector<Player> bidPlayers = *playersNotDone;
-	vector<Player>* bidPlayersPtr = &bidPlayers;
+	vector<Player> bidPlayers = *playersNotDone; //Keep track of the original list of players who can make an action
+	vector<Player>* bidPlayersPtr = &bidPlayers; //Keep track of list of players who can bid
 	bool bid = true;
-	int minimumBid = bidPlayers.size() == 1 ? cardBid->getNumber() : cardBid->getNumber() - 1;
+	int minimumBid = bidPlayers.size() == 1 ? cardBid->getNumber() : cardBid->getNumber() - 1; //Keep track of the minimum possible bid on the card
 	int bidInput;
 	while (bid) {
 		//Bid is over when there's only one possible bidder
@@ -180,6 +236,7 @@ Player bidPhase(vector<Player>* playersNotDone, PowerplantCard* cardBid, vector<
 		}
 		else {
 			int index = 0;
+			//Go through each remaining bidder in order
 			while (bidPlayers.size() > 1) {
 				Player player = bidPlayers.at(index);
 				cout << "Player " << player.getColor() << " with " << player.getMoney() << " elektro enter bid: ";
@@ -189,6 +246,7 @@ Player bidPhase(vector<Player>* playersNotDone, PowerplantCard* cardBid, vector<
 					cout << "Enter new bid: ";
 					cin >> bidInput;
 				}
+				//If user input 0, he gets out of the auction
 				if (bidInput == 0) {
 					for (auto it = (*bidPlayersPtr).begin(); it != (*bidPlayersPtr).end();) {
 						if ((*it) == player) {
@@ -228,6 +286,7 @@ Player bidPhase(vector<Player>* playersNotDone, PowerplantCard* cardBid, vector<
 		}
 	}
 
+	//Return the winner of the auction
 	return (bidPlayers.at(0));
 }
 
@@ -238,18 +297,20 @@ void Game::phase2() {
 	cout << "**************************************************" << endl;
 	int choice;
 	string resourceType;
-	vector<Player> playersNotDone = gamePlayers;
+	vector<Player> playersNotDone = gamePlayers; //Keep track of the players who can still make an action
 	vector<Player>* gamePlayersPtr = &gamePlayers;
 	vector<Player>* playersPtr = &playersNotDone;
 	PowerplantCard* cardBid = nullptr;
 	while (!playersNotDone.empty()) {
 		Player player = playersNotDone.at(0);
 		choice = 0;
+		//Display cards on board
 		cout << "Powerplant cards on board: " << endl;
 		for (auto card : gameCards.getCardsOnBoard()) {
 			card.displayCard();
 		}
 		cout << endl;
+		//Player choose action
 		while (choice != 1 and choice != 2) {
 			cout << "Player " << player.getColor() << " with " << player.getMoney() << " elektro choose action:" << endl;
 			cout << "1: Pass" << endl;
@@ -263,6 +324,7 @@ void Game::phase2() {
 				cout << "Enter the number of the card you want: ";
 				cin >> choice;
 				for (auto card : gameCards.getCardsOnBoard()) {
+					//Check if the user has enough money for the selected card
 					if (card.getNumber() == choice) {
 						if (card.getNumber() <= player.getMoney()) {
 							resourceType = card.getResourceType();
@@ -280,6 +342,7 @@ void Game::phase2() {
 				}
 			}
 			Player winningBidder = bidPhase(playersPtr, cardBid, gamePlayersPtr, resourceType);
+			//Update game after an auction is over
 			updatePlayersNotDone(playersPtr, winningBidder);
 			gameCards.buyCard((*cardBid).getNumber());
 		}
@@ -287,6 +350,8 @@ void Game::phase2() {
 			updatePlayersNotDone(playersPtr, player);
 		}
 	}
+
+	//Display each player possessions
 	for (auto player : gamePlayers) {
 		cout << "Player " << player.getColor() << " has: ";
 		for (auto powerplantCard : player.getPowerplantCards()) {
@@ -296,6 +361,7 @@ void Game::phase2() {
 	}
 }
 
+//Helper method
 void displayOwnedPCards(Player player) {
 	int position = 1;
 	for (auto pCard : player.getPowerplantCards()) {
@@ -337,7 +403,7 @@ void Game::phase3() {
 					cout << "Enter card for which you want to buy resources: ";
 					cin >> cardChoice;
 				}
-				//Input 0 when done
+				//End buying phase for the user when he inputs 0
 				if (cardChoice == 0) {
 					//
 					//TODO: Reallocating resources
@@ -352,7 +418,9 @@ void Game::phase3() {
 				string resourceChoice;
 				int qtyChoice;
 				string confirmChoice;
+				//Display number of resources on the owned powerplant
 				cout << "This powerplant has " << selectedPC.getAvailableResources().size() << endl;
+				//Indicates how many resources the user can buy for the plant
 				if ((2 * selectedPC.getResourceQty() - selectedPC.getAvailableResources().size()) == 0) {
 					cout << "You can't buy more resources for this powerplant." << endl;
 					continue;
@@ -364,11 +432,13 @@ void Game::phase3() {
 				cout << "Confirm purchase? ";
 				cin >> confirmChoice;
 				if (confirmChoice == "yes" || confirmChoice == "y" || confirmChoice == "1") {
+					//When buying resources for the plant
 					for (int i = 0; i < qtyChoice; i++) {
 						Resource r = Resource(gameResources.getNextResource(resourceChoice));
+						//Remove the resources from the board
 						gameResources.removeResource(resourceChoice, 1);
-						gameResources.removeResourceTotal(resourceChoice, 1);
 						int index = 0;
+						//Add the resources to the correct powerplant card
 						for (auto& pc : pcs) {
 							if (index == (cardChoice - 1)) {
 								pc.addAvailableResource(r);
@@ -390,6 +460,7 @@ void Game::phase3() {
 //Return list of cities where the player can build a house in
 vector<City> getAvailableCities(Player player, Map m, int step) {
 	vector<City> availableCities;
+	//If the player has no city, he can build a house on any available city
 	if (player.getCities().size() == 0) {
 		for (City& city : m.getAvailableCities()) {
 			if (city.getHouses().size() < step) {
@@ -398,6 +469,7 @@ vector<City> getAvailableCities(Player player, Map m, int step) {
 		}
 	}
 	else {
+		//If the player is at least in one city, the available cities are determined by the connections 
 		for (auto city : player.getCities()) {
 			for (City& c : m.getConnectionsForCity(city)) {
 				for (City& aCity : m.getAvailableCities()) {
@@ -466,6 +538,7 @@ void Game::phase4() {
 			//Try to buy house in city
 			cout << "The lowest connection cost is: " << connectionCost << endl;
 			if ((*player).buyHouse(chosenCity, connectionCost)) {
+				//If successful, add a house of the player's color in the city
 				vector<City> c = gameMap.getAvailableCities();
 				for (auto& city : c) {
 					if (chosenCity.getName() == city.getName()) {
@@ -491,10 +564,18 @@ void Game::phase4() {
 		for (auto c : p.getCities()) {
 			cout << c.getName() << " ";
 		}
+		//Trigger step 2 if one of the player has reached 7 cities
+		if (p.getCities().size() >= 17) {
+			triggerEnd();
+		}
+		if (p.getCities().size() >= 7) {
+			triggerStep2();
+		}
 		cout << endl;
 	}
 }
 
+//Return payment based on the number of powered cities
 int getPayment(int numberOfCities) {
 	switch (numberOfCities) {
 	case 0: return 10;
@@ -540,9 +621,10 @@ void Game::phase5() {
 		//First, calculate number of owned alimented cities 
 		int alimentedCities = 0;
 		vector<PowerplantCard> pcs = (*player).getPowerplantCards();
+		//Remove the appropriate number of resources in each powered powerplant
 		for (auto& pc : pcs) {
 			if (pc.isAlimented()) {
-				alimentedCities++;
+				alimentedCities += pc.getCities();
 				vector<Resource> rs = pc.removeAlimentingResources();
 				for (auto& r : rs) {
 					removedResources.push_back(r);
@@ -550,10 +632,12 @@ void Game::phase5() {
 			}
 		}
 		(*player).updatePowerplantCards(pcs);
+		//Test if the player had less cities than what he could power up
 		if ((*player).getCities().size() < alimentedCities) {
 			alimentedCities = (*player).getCities().size();
 		}
 		int moneyEarned = getPayment(alimentedCities);
+		//Pay the player
 		(*player).getPayment(moneyEarned);
 		cout << "Player  " << (*player).getColor() << " earned " << moneyEarned << " elektro." << endl;
 	}

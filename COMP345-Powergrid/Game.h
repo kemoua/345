@@ -11,6 +11,10 @@ class Game {
 public:
 	Game() : gameStep(1) {}
 	~Game() {}
+	void triggerStep2() { gameStep = 2; } //To implement in .cpp since it will have more actions to handle
+	void triggerStep3() { gameStep = 3; } //To implement in .cpp since it will have more actions to handle
+	void triggerEnd();
+	int getStep() const { return gameStep; }
 	void start();
 	void phase1();
 	void phase2();
