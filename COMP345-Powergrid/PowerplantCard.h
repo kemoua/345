@@ -13,7 +13,7 @@ using std::vector;
 class PowerplantCard : public Card {
 public:
 	PowerplantCard() {}
-	PowerplantCard(int number, string resourceType, int resourceQty, int cities) : number(number), resourceType(resourceType), resourceQty(resourceQty), cities(cities), alimented(false) {};
+	PowerplantCard(int number, string resourceType, int resourceQty, int cities) : number(number), resourceType(resourceType), resourceQty(resourceQty), cities(cities), alimented(false), canAddResource(true) {};
 
 	void setResourceType(string s) { resourceType = s; }
 	int getNumber() const { return number; }
@@ -22,7 +22,7 @@ public:
 	int getCities() const { return cities; }
 	vector<Resource> getAvailableResources() const { return availableResources; }
 	bool isAlimented() const { return alimented; }
-	bool addAvailableResource(Resource r);
+	void addAvailableResource(Resource r);
 	int reallocateResource(string resourceName, int quantity);
 
 	bool operator < (const PowerplantCard& p) const
@@ -38,5 +38,6 @@ private:
 	int resourceQty; //The number of resources needed
 	int cities; //The number of cities this card can power up
 	bool alimented;
+	bool canAddResource;
 	vector<Resource> availableResources;
 };

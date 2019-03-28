@@ -78,3 +78,29 @@ void ResourceSetup::removeResource(string type, int qty) {
 	resourcesOnBoard[type] -= qty;
 	updateCheapestPrice(type);
 }
+
+//Return the minimum total cost of a quantity of a resource
+int ResourceSetup::getPrice(string resourceType, int qty) const{
+	int totalPrice = 0;
+	for (auto r : resourcesOnBoard) {
+		string type = r.first;
+		int qtyOnBoard = r.second;
+		if (type == resourceType) {
+			for (int i = 0; i < qty; i++) {
+				if (resourceType != "uranium") {
+					totalPrice += 9 - ceil((qtyOnBoard - i) / 3);
+				}
+				else {
+					if (qtyOnBoard < 5) {
+						totalPrice += 18 - 2 * (qtyOnBoard - i);
+					}
+					else {
+						totalPrice += 13 - (qtyOnBoard - i);
+					}
+				}
+			}
+			break;
+		}
+	}
+	return totalPrice;
+}

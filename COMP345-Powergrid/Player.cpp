@@ -68,3 +68,8 @@ bool comparePowerplantCards(PowerplantCard& p1, PowerplantCard& p2) {
 		return false;
 	}
 }
+
+void Player::updatePowerplantCards(vector<PowerplantCard> pcs) {
+	powerplantCards.clear();
+	powerplantCards = pcs;
+}

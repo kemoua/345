@@ -1,15 +1,14 @@
 #include "PowerplantCard.h"
 
-bool PowerplantCard::addAvailableResource(Resource r) {
-	if (availableResources.size() < (resourceQty * 2)) {
+void PowerplantCard::addAvailableResource(Resource r) {
+	if (canAddResource) {
 		availableResources.push_back(r);
 		if (availableResources.size() >= resourceQty) {
 			alimented = true;
 		}
-		return true;
-	}
-	else {
-		return false;
+		if (availableResources.size() == (resourceQty * 2)) {
+			canAddResource = false;
+		}
 	}
 }
 
@@ -28,6 +27,7 @@ int PowerplantCard::reallocateResource(string resourceName, int quantity) {
 		}
 	}
 	alimented = (availableResources.size() >= resourceQty);
+	canAddResource = !(availableResources.size() == (resourceQty * 2));
 	return q;
 }
 

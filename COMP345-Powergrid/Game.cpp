@@ -309,6 +309,7 @@ void Game::phase3() {
 	cout << endl;
 
 	for (vector<Player>::reverse_iterator player = gamePlayers.rbegin(); player != gamePlayers.rend(); ++player) {
+		//Skip player turn if he has no powerplant cards
 		if ((*player).getPowerplantCards().size() == 0) {
 			cout << "Player " << (*player).getColor() << " has no powerplant cards." << endl;
 			continue;
@@ -317,8 +318,9 @@ void Game::phase3() {
 			bool buyingResources = true;
 			while (buyingResources) {
 				int position = 1;
+				//Display list of powerplants owned by player
 				for (auto pCard : (*player).getPowerplantCards()) {
-					cout << position << "- ";
+					cout << position << "- (can buy " << (2 * pCard.getResourceQty() - pCard.getAvailableResources().size()) << " more resources) ";
 					pCard.displayCard();
 					position++;
 				}
@@ -327,11 +329,44 @@ void Game::phase3() {
 					cout << "Enter card for which you want to buy resources: ";
 					cin >> cardChoice;
 				}
+				//Input 0 when done
 				if (cardChoice == 0) {
 					buyingResources = false;
 					break;
 				}
-				(*player).getPowerplantCards().at(cardChoice - 1).displayCard();
+				vector<PowerplantCard> pcs = (*player).getPowerplantCards();
+				PowerplantCard selectedPC = (*player).getPowerplantCards().at(cardChoice - 1);
+				string resourceChoice;
+				int qtyChoice;
+				string confirmChoice;
+				cout << "This powerplant has " << selectedPC.getAvailableResources().size() << endl;
+				if ((2 * selectedPC.getResourceQty() - selectedPC.getAvailableResources().size()) == 0) {
+					cout << "You can't buy more resources for this powerplant." << endl;
+					continue;
+				}
+				cout << "You can buy " << (2 * selectedPC.getResourceQty() - selectedPC.getAvailableResources().size()) << " " << selectedPC.getResourceType() << endl;
+				cout << "What would you like to buy? (resource quantity)" << endl;
+				cin >> resourceChoice >> qtyChoice;
+				cout << "This would cost you: " << gameResources.getPrice(resourceChoice, qtyChoice) << " elektro." << endl;
+				cout << "Confirm purchase? ";
+				cin >> confirmChoice;
+				if (confirmChoice == "yes" || confirmChoice == "y" || confirmChoice == "1") {
+					for (int i = 0; i < qtyChoice; i++) {
+						Resource r = Resource(gameResources.getNextResource(resourceChoice));
+						gameResources.removeResource(resourceChoice, 1);
+						int index = 0;
+						for (auto& pc : pcs) {
+							if (index == (cardChoice - 1)) {
+								pc.addAvailableResource(r);
+								break;
+							}
+							else {
+								index++;
+							}
+						}
+					}
+					(*player).updatePowerplantCards(pcs);
+				}
 			}
 		}
 

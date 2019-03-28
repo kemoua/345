@@ -27,6 +27,7 @@ public:
 	Resource getNextResource(string type);
 	void addResource(string type, int qty);
 	void removeResource(string type, int qty);
+	int getPrice(string resourceType, int qty) const;
 
 private:
 	map<string, int> houses;

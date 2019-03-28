@@ -39,6 +39,7 @@ public:
 	void buyPowerplantCard(PowerplantCard p, int cost);
 	void buyResource(Resource r);
 	bool buyHouse(City c);
+	void updatePowerplantCards(vector<PowerplantCard> pcs);
 
 	void displayResources() const;
 
