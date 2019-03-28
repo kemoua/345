@@ -186,6 +186,7 @@
     </ClCompile>
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Connection.cpp" />
+    <ClCompile Include="PowerplantCard.cpp" />
     <ClCompile Include="ResourceSetup.cpp" />
   </ItemGroup>
   <ItemGroup>

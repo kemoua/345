@@ -161,6 +161,9 @@ int main()
 
 	Game game = Game();
 	game.start();
-	game.phase1();
-	game.phase2();
+	while (true) {
+		game.phase1();
+		game.phase2();
+		game.phase3();
+	}
 }

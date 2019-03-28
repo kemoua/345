@@ -139,6 +139,9 @@ void Game::start() {
 
 //Determine new player order
 void Game::phase1() {
+	cout << "**************************************************" << endl;
+	cout << "****                PHASE 1                   ****" << endl;
+	cout << "**************************************************" << endl;
 	sort(gamePlayers.begin(), gamePlayers.end());
 	cout << "The player order is: " << endl;
 	for (auto player : gamePlayers) {
@@ -169,8 +172,10 @@ Player bidPhase(vector<Player>* playersNotDone, PowerplantCard* cardBid, vector<
 	while (bid) {
 		//Bid is over when there's only one possible bidder
 		if (bidPlayers.size() == 1) {
+			cout << "****            END OF AUCTION                ****" << endl;
 			cout << "Winner of the auction is " << bidPlayers.at(0).getColor();
 			cout << " with a bid of " << minimumBid << " elektro." << endl;
+			cout << "**************************************************" << endl;
 			bid = false;
 		}
 		else {
@@ -227,6 +232,9 @@ Player bidPhase(vector<Player>* playersNotDone, PowerplantCard* cardBid, vector<
 
 //Auction powerplants
 void Game::phase2() {
+	cout << "**************************************************" << endl;
+	cout << "****                PHASE 2                   ****" << endl;
+	cout << "**************************************************" << endl;
 	int choice;
 	vector<Player> playersNotDone = gamePlayers;
 	vector<Player>* gamePlayersPtr = &gamePlayers;
@@ -282,6 +290,48 @@ void Game::phase2() {
 			cout << powerplantCard.getNumber() << " ";
 		}
 		cout << endl;
+	}
+}
+
+//Buy resources
+void Game::phase3() {
+	cout << "**************************************************" << endl;
+	cout << "****                PHASE 3                   ****" << endl;
+	cout << "**************************************************" << endl;
+	//Display the play order
+	cout << "Player order: ";
+	for (vector<Player>::reverse_iterator it = gamePlayers.rbegin(); it != gamePlayers.rend(); ++it) {
+		cout << (*it).getColor() << " ";
+	}
+	cout << endl;
+
+	for (vector<Player>::reverse_iterator player = gamePlayers.rbegin(); player != gamePlayers.rend(); ++player) {
+		if ((*player).getPowerplantCards().size() == 0) {
+			cout << "Player " << (*player).getColor() << " has no powerplant cards." << endl;
+			continue;
+		}
+		else {
+			bool buyingResources = true;
+			while (buyingResources) {
+				int position = 1;
+				for (auto pCard : (*player).getPowerplantCards()) {
+					cout << position << "- ";
+					pCard.displayCard();
+					position++;
+				}
+				int cardChoice = -1;
+				while (cardChoice < 0 || cardChoice >(*player).getPowerplantCards().size()) {
+					cout << "Enter card for which you want to buy resources: ";
+					cin >> cardChoice;
+				}
+				if (cardChoice == 0) {
+					buyingResources = false;
+					break;
+				}
+				(*player).getPowerplantCards().at(cardChoice - 1).displayCard();
+			}
+		}
+
 	}
 }
 
