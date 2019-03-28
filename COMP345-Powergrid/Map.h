@@ -29,7 +29,7 @@ public:
 
 	void updateAvailableCities(vector<City> cities);
 	void setAvailableRegionsAndCities(vector<string> regionsChoice);
-	void displayConnectionsForCity(City c) const;
+	vector<City> getConnectionsForCity(City c) const;
 
 private:
 	vector<Region> regions;

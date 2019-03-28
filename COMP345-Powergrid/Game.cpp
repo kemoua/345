@@ -387,11 +387,27 @@ void Game::phase3() {
 }
 
 //Return list of cities where the player can build a house in
-vector<City> getAvailableCities(Player player, vector<City> cities, int step) {
+vector<City> getAvailableCities(Player player, Map m, int step) {
 	vector<City> availableCities;
-	for (City& city : cities) {
-		if (city.getHouses().size() < step) {
-			availableCities.push_back(city);
+	if (player.getCities().size() == 0) {
+		for (City& city : m.getAvailableCities()) {
+			if (city.getHouses().size() < step) {
+				availableCities.push_back(city);
+			}
+		}
+	}
+	else {
+		for (auto city : player.getCities()) {
+			for (City& c : m.getConnectionsForCity(city)) {
+				for (City& aCity : m.getAvailableCities()) {
+					if (c.getName() == aCity.getName()) {
+						if (aCity.getHouses().size() < step) {
+							availableCities.push_back(aCity);
+						}
+						break;
+					}
+				}
+			}
 		}
 	}
 	return availableCities;
@@ -400,7 +416,7 @@ vector<City> getAvailableCities(Player player, vector<City> cities, int step) {
 //Building
 void Game::phase4() {
 	cout << "**************************************************" << endl;
-	cout << "****                PHASE 4                   ****" << endl;
+	cout << "****              PHASE 4 step " << gameStep << "              ****" << endl;
 	cout << "**************************************************" << endl;
 	//Display the play order
 	cout << "Player order: ";
@@ -410,11 +426,15 @@ void Game::phase4() {
 	cout << endl;
 
 	for (vector<Player>::reverse_iterator player = gamePlayers.rbegin(); player != gamePlayers.rend(); ++player) {
+		vector<City> availableCities = getAvailableCities(*player, gameMap, gameStep);
+		if (availableCities.size() == 0) {
+			cout << "You can't buy houses for now." << endl;
+			continue;
+		}
 		cout << "****    Player " << (*player).getColor() << "    ****" << endl;
 		cout << "Choose a city:" << endl;
 		int index = 1;
 		int cityChoice;
-		vector<City> availableCities = getAvailableCities(*player, gameMap.getAvailableCities(), gameStep);
 		//Player choose city to buy a house in
 		for (auto city : availableCities) {
 			cout << index << ": " << city.getName() << " (has " << city.getHouses().size() << " house(s))" << endl;

@@ -25,18 +25,23 @@ void Map::addCityToRegion(City city, Region region) {
 }
 
 //Display for a city the list of cities connected to it and the costs associated to the connections
-void Map::displayConnectionsForCity(City city) const {
+vector<City> Map::getConnectionsForCity(City city) const {
+	vector<City> connectedCities;
 	string cityName = city.getName();
-	cout << cityName << ": ";
+	int index = 1;
 	for (auto c : connections) {
 		if (cityName == c.getStartCity().getName()) {
-			cout << c.getEndCity().getName() << " (" << c.getCost() << ") ";
+			cout << c.getEndCity().getName() << " (connection cost: " << c.getCost() << ") " << std::endl;
+			connectedCities.push_back(c.getEndCity());
 		}
 		else if (cityName == c.getEndCity().getName()) {
-			cout << c.getStartCity().getName() << " (" << c.getCost() << ") ";
+			cout << c.getStartCity().getName() << " (connection cost: " << c.getCost() << ") " << std::endl;
+			connectedCities.push_back(c.getStartCity());
 		}
+		index++;
 	}
-	cout << std::endl;
+	sort(connectedCities.begin(), connectedCities.end());
+	return connectedCities;
 }
 
 vector<string> Map::getRegionAdjacency(vector<string> regionsName) const {

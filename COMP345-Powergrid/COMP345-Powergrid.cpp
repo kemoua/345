@@ -25,9 +25,6 @@ void testMap() {
 	Map m = Map(loader.getRegions(), loader.getCities(), loader.getConnections());
 	loader.~MapLoader();
 	cout << "List of cities with their connections: " << endl;
-	for (auto c : m.getCities()) {
-		m.displayConnectionsForCity(c);
-	}
 	cout << endl << "Connections list: " << endl;
 	for (auto c : m.getConnections()) {
 		cout << c.toString() << endl;

@@ -22,6 +22,10 @@ public:
 	string getRegionName() const { return regionName; }
 
 	void operator = (City c);
+	bool operator < (const City& c) const
+	{
+		return (name < c.getName());
+	}
 
 private:
 	string name;
