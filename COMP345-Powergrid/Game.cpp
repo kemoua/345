@@ -65,6 +65,18 @@ void Game::triggerEnd() {
 	//TODO: Display winner. End Game properly.
 }
 
+void Game::triggerStep2() {
+	gameStep = 2;
+	currentStep = 2;
+	NotifyPhase();
+}
+
+void Game::triggerStep3() {
+	gameStep = 3;
+	currentStep = 3;
+	NotifyPhase();
+}
+
 void Game::start() {
 	//Map loading
 	vector<string> maps = { "MapUSA.txt", "MapBad1.txt", "MapBad2.txt" };
