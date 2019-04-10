@@ -25,6 +25,7 @@ public:
 
 	int getCurrentStep() const { return currentStep; }
 	int getCurrentPhase() const { return currentPhase; }
+	string getCurrentAction() const { return currentAction; }
 	Player getCurrentPlayer() const { return *currentPlayer; }
 	vector<Player> getGamePlayers() const { return gamePlayers; }
 
@@ -37,5 +38,6 @@ private:
 	int gameStep;
 	int currentStep;
 	int currentPhase;
+	string currentAction;
 	Player* currentPlayer;
 };

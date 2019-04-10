@@ -45,6 +45,7 @@ void GameDriver::DisplayPhase() {
 			cout << player.getColor() << " ";
 		}
 	}
-	cout << "    Currently playing: " << game->getCurrentPlayer().getColor() << endl;
+	cout << "    Player's turn: " << game->getCurrentPlayer().getColor() << endl;
+	cout << "								Current Action: " << game->getCurrentAction() << endl;
 	cout << "								**************************************************" << endl;
 }

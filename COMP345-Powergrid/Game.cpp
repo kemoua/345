@@ -210,6 +210,7 @@ void Game::phase1() {
 	sort(gamePlayers.begin(), gamePlayers.end());
 	currentPhase = 1;
 	currentPlayer = &gamePlayers.at(0);
+	currentAction = "";
 	NotifyPhase();
 }
 
@@ -310,6 +311,7 @@ void Game::phase2() {
 	while (!playersNotDone.empty()) {
 		Player player = playersNotDone.at(0);
 		currentPlayer = &player;
+		currentAction = "Select powerplant card for auction";
 		NotifyPhase();
 		choice = 0;
 		//Display cards on board
@@ -349,6 +351,8 @@ void Game::phase2() {
 					cout << "This is not a valid card." << endl;
 				}
 			}
+			currentAction = "Bidding on powerplant card";
+			NotifyPhase();
 			Player winningBidder = bidPhase(playersPtr, cardBid, gamePlayersPtr, resourceType);
 			//Update game after an auction is over
 			updatePlayersNotDone(playersPtr, winningBidder);
@@ -382,7 +386,7 @@ void displayOwnedPCards(Player player) {
 //Buy resources
 void Game::phase3() {
 	currentPhase = 3;
-
+	currentAction = "Buy resources for powerplants";
 	for (vector<Player>::reverse_iterator player = gamePlayers.rbegin(); player != gamePlayers.rend(); ++player) {
 		currentPlayer = &(*player);
 		NotifyPhase();
@@ -491,7 +495,7 @@ vector<City> getAvailableCities(Player player, Map m, int step) {
 //Building
 void Game::phase4() {
 	currentPhase = 4;
-
+	currentAction = "Build a house in a city";
 	for (vector<Player>::reverse_iterator player = gamePlayers.rbegin(); player != gamePlayers.rend(); ++player) {
 		currentPlayer = &(*player);
 		NotifyPhase();
@@ -601,7 +605,7 @@ int getPayment(int numberOfCities) {
 //Bureaucracy
 void Game::phase5() {
 	currentPhase = 5;
-
+	currentAction = "";
 	vector<Resource> removedResources;
 	for (vector<Player>::iterator player = gamePlayers.begin(); player != gamePlayers.end(); ++player) {
 		currentPlayer = &(*player);
