@@ -4,10 +4,11 @@
 #include "Player.h"
 #include "ResourceSetup.h"
 #include "CardDriver.h"
+#include "PhaseSubject.h"
 
 using std::vector;
 
-class Game {
+class Game : public PhaseSubject {
 public:
 	Game() : gameStep(1) {}
 	~Game() {}
@@ -22,10 +23,19 @@ public:
 	void phase4();
 	void phase5();
 
+	int getCurrentStep() const { return currentStep; }
+	int getCurrentPhase() const { return currentPhase; }
+	Player getCurrentPlayer() const { return *currentPlayer; }
+	vector<Player> getGamePlayers() const { return gamePlayers; }
+
+
 private:
 	Map gameMap;
 	vector<Player> gamePlayers;
 	ResourceSetup gameResources;
 	CardDriver gameCards;
 	int gameStep;
+	int currentStep;
+	int currentPhase;
+	Player* currentPlayer;
 };

@@ -189,20 +189,16 @@ void Game::start() {
 	}
 	cout << endl;
 	cout << "**************************************************" << endl;
+
+	currentStep = 1;
 }
 
 //Determine new player order
 void Game::phase1() {
-	cout << "**************************************************" << endl;
-	cout << "****                PHASE 1                   ****" << endl;
-	cout << "**************************************************" << endl;
 	sort(gamePlayers.begin(), gamePlayers.end());
-	cout << "The player order is: " << endl;
-	for (auto player : gamePlayers) {
-		cout << player.getColor() << " ";
-	}
-	cout << endl;
-	cout << "**************************************************" << endl;
+	currentPhase = 1;
+	currentPlayer = &gamePlayers.at(0);
+	NotifyPhase();
 }
 
 //Helper method
@@ -292,9 +288,7 @@ Player bidPhase(vector<Player>* playersNotDone, PowerplantCard* cardBid, vector<
 
 //Auction powerplants
 void Game::phase2() {
-	cout << "**************************************************" << endl;
-	cout << "****                PHASE 2                   ****" << endl;
-	cout << "**************************************************" << endl;
+	currentPhase = 2;
 	int choice;
 	string resourceType;
 	vector<Player> playersNotDone = gamePlayers; //Keep track of the players who can still make an action
@@ -303,6 +297,8 @@ void Game::phase2() {
 	PowerplantCard* cardBid = nullptr;
 	while (!playersNotDone.empty()) {
 		Player player = playersNotDone.at(0);
+		currentPlayer = &player;
+		NotifyPhase();
 		choice = 0;
 		//Display cards on board
 		cout << "Powerplant cards on board: " << endl;
@@ -373,17 +369,11 @@ void displayOwnedPCards(Player player) {
 
 //Buy resources
 void Game::phase3() {
-	cout << "**************************************************" << endl;
-	cout << "****                PHASE 3                   ****" << endl;
-	cout << "**************************************************" << endl;
-	//Display the play order
-	cout << "Player order: ";
-	for (vector<Player>::reverse_iterator it = gamePlayers.rbegin(); it != gamePlayers.rend(); ++it) {
-		cout << (*it).getColor() << " ";
-	}
-	cout << endl;
+	currentPhase = 3;
 
 	for (vector<Player>::reverse_iterator player = gamePlayers.rbegin(); player != gamePlayers.rend(); ++player) {
+		currentPlayer = &(*player);
+		NotifyPhase();
 		//Skip player turn if he has no powerplant cards
 		if ((*player).getPowerplantCards().size() == 0) {
 			cout << "Player " << (*player).getColor() << " has no powerplant cards." << endl;
@@ -488,17 +478,11 @@ vector<City> getAvailableCities(Player player, Map m, int step) {
 
 //Building
 void Game::phase4() {
-	cout << "**************************************************" << endl;
-	cout << "****              PHASE 4 step " << gameStep << "              ****" << endl;
-	cout << "**************************************************" << endl;
-	//Display the play order
-	cout << "Player order: ";
-	for (vector<Player>::reverse_iterator it = gamePlayers.rbegin(); it != gamePlayers.rend(); ++it) {
-		cout << (*it).getColor() << " ";
-	}
-	cout << endl;
+	currentPhase = 4;
 
 	for (vector<Player>::reverse_iterator player = gamePlayers.rbegin(); player != gamePlayers.rend(); ++player) {
+		currentPlayer = &(*player);
+		NotifyPhase();
 		vector<City> availableCities = getAvailableCities(*player, gameMap, gameStep);
 		if (availableCities.size() == 0) {
 			cout << "You can't buy houses for now." << endl;
@@ -604,19 +588,13 @@ int getPayment(int numberOfCities) {
 
 //Bureaucracy
 void Game::phase5() {
-	cout << "**************************************************" << endl;
-	cout << "****                PHASE 5                   ****" << endl;
-	cout << "**************************************************" << endl;
-
-	//Display the play order
-	cout << "Player order: ";
-	for (vector<Player>::iterator player = gamePlayers.begin(); player != gamePlayers.end(); ++player) {
-		cout << (*player).getColor() << " ";
-	}
-	cout << endl;
+	currentPhase = 5;
 
 	vector<Resource> removedResources;
 	for (vector<Player>::iterator player = gamePlayers.begin(); player != gamePlayers.end(); ++player) {
+		currentPlayer = &(*player);
+		NotifyPhase();
+
 		//Earn money
 		//First, calculate number of owned alimented cities 
 		int alimentedCities = 0;
