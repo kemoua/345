@@ -212,6 +212,7 @@ void Game::phase1() {
 	currentPlayer = &gamePlayers.at(0);
 	currentAction = "";
 	NotifyPhase();
+	NotifyStats();
 }
 
 //Helper method
@@ -357,6 +358,7 @@ void Game::phase2() {
 			//Update game after an auction is over
 			updatePlayersNotDone(playersPtr, winningBidder);
 			gameCards.buyCard((*cardBid).getNumber());
+			NotifyStats();
 		}
 		else {
 			updatePlayersNotDone(playersPtr, player);
@@ -364,13 +366,13 @@ void Game::phase2() {
 	}
 
 	//Display each player possessions
-	for (auto player : gamePlayers) {
-		cout << "Player " << player.getColor() << " has: ";
-		for (auto powerplantCard : player.getPowerplantCards()) {
-			cout << powerplantCard.getNumber() << " ";
-		}
-		cout << endl;
-	}
+	//for (auto player : gamePlayers) {
+	//	cout << "Player " << player.getColor() << " has: ";
+	//	for (auto powerplantCard : player.getPowerplantCards()) {
+	//		cout << powerplantCard.getNumber() << " ";
+	//	}
+	//	cout << endl;
+	//}
 }
 
 //Helper method
@@ -456,6 +458,7 @@ void Game::phase3() {
 						}
 					}
 					(*player).updatePowerplantCards(pcs);
+					NotifyStats();
 				}
 			}
 		}
@@ -547,6 +550,7 @@ void Game::phase4() {
 					}
 				}
 				gameMap.updateAvailableCities(c);
+				NotifyStats();
 				bought = true;
 			}
 			else {
@@ -560,18 +564,20 @@ void Game::phase4() {
 	}
 	//Display possession of each player
 	for (auto p : gamePlayers) {
-		cout << p.getColor() << ": " << p.getMoney() << " elektro left, cities: ";
+		/*cout << p.getColor() << ": " << p.getMoney() << " elektro left, cities: ";
 		for (auto c : p.getCities()) {
 			cout << c.getName() << " ";
 		}
+		cout << endl;*/
+
 		//Trigger step 2 if one of the player has reached 7 cities
 		if (p.getCities().size() >= 17) {
 			triggerEnd();
+			break;
 		}
 		if (p.getCities().size() >= 7) {
 			triggerStep2();
 		}
-		cout << endl;
 	}
 }
 
@@ -605,7 +611,7 @@ int getPayment(int numberOfCities) {
 //Bureaucracy
 void Game::phase5() {
 	currentPhase = 5;
-	currentAction = "";
+	currentAction = "Remove resources";
 	vector<Resource> removedResources;
 	for (vector<Player>::iterator player = gamePlayers.begin(); player != gamePlayers.end(); ++player) {
 		currentPlayer = &(*player);
@@ -617,15 +623,30 @@ void Game::phase5() {
 		vector<PowerplantCard> pcs = (*player).getPowerplantCards();
 		//Remove the appropriate number of resources in each powered powerplant
 		for (auto& pc : pcs) {
-			if (pc.isAlimented()) {
-				alimentedCities += pc.getCities();
-				vector<Resource> rs = pc.removeAlimentingResources();
-				for (auto& r : rs) {
-					removedResources.push_back(r);
+			if (pc.isAlimented() || pc.getResourceQty() == 0) {
+				//If the powerplant doesn't need resources
+				if (pc.getResourceQty() == 0) {
+					alimentedCities += pc.getCities();
+				}
+				else {
+					//Ask if user wants to remove the resources from a powerplant
+					pc.displayCard();
+					string use = "";
+					cout << "Do you want to use the resources to power this plant? ";
+					cin >> use;
+					cout << endl;
+					if (use == "1" || use == "y" || use == "yes") {
+						alimentedCities += pc.getCities();
+						vector<Resource> rs = pc.removeAlimentingResources();
+						for (auto& r : rs) {
+							removedResources.push_back(r);
+						}
+						(*player).updatePowerplantCards(pcs);
+						NotifyStats();
+					}
 				}
 			}
 		}
-		(*player).updatePowerplantCards(pcs);
 		//Test if the player had less cities than what he could power up
 		if ((*player).getCities().size() < alimentedCities) {
 			alimentedCities = (*player).getCities().size();
@@ -633,7 +654,8 @@ void Game::phase5() {
 		int moneyEarned = getPayment(alimentedCities);
 		//Pay the player
 		(*player).getPayment(moneyEarned);
-		cout << "Player  " << (*player).getColor() << " earned " << moneyEarned << " elektro." << endl;
+		cout << "Player  " << (*player).getColor() << " earned " << moneyEarned << " elektro by powering " << alimentedCities << " cities." << endl;
+		NotifyStats();
 	}
 
 	//Resupply market
@@ -642,15 +664,16 @@ void Game::phase5() {
 	//Discard random card and draw another one
 	gameCards.removeCardRandomly();
 
+	NotifyStats();
 	//Display possession of each player
-	for (auto p : gamePlayers) {
+	/*for (auto p : gamePlayers) {
 		cout << p.getColor() << ": " << p.getMoney() << " elektro. Powerplant Cards:" << endl;
 		for (auto ppc : p.getPowerplantCards()) {
 			ppc.displayCard();
 			cout << "    " << ppc.getAvailableResources().size() << endl;
 		}
 		cout << endl;
-	}
+	}*/
 
 	//Display resources removed from powerplants and add them back to the total number of resources available
 	for (auto r : removedResources) {

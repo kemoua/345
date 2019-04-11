@@ -40,7 +40,7 @@ vector<Resource> PowerplantCard::removeAlimentingResources() {
 	if (alimented) {
 		int i = 0;
 		for (auto it = availableResources.begin(); it != availableResources.end();) {
-			if (availableResources.size() != 0 && i < availableResources.size()) {
+			if (i < resourceQty) {
 				removedResources.push_back((*it));
 				it = availableResources.erase(it);
 				i++;
