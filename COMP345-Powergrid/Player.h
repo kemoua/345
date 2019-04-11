@@ -44,6 +44,10 @@ public:
 	void displayResources() const;
 	void getPayment(int payment) { money += payment; }
 
+	bool makeAuction() const ;
+	bool Pass() const { return false; }
+	bool Auction() const { return true; }
+
 	bool operator < (const Player& p) const
 	{
 		if (cities.size() == p.getCities().size()) {

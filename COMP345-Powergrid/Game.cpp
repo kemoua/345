@@ -322,13 +322,13 @@ void Game::phase2() {
 		}
 		cout << endl;
 		//Player choose action
-		while (choice != 1 and choice != 2) {
+		/*while (choice != 1 and choice != 2) {
 			cout << "Player " << player.getColor() << " with " << player.getMoney() << " elektro choose action:" << endl;
 			cout << "1: Pass" << endl;
 			cout << "2: Auction" << endl;
 			cin >> choice;
-		}
-		if (choice == 2) {
+		}*/
+		if (player.makeAuction()) {
 			//Select powerplant card
 			bool validCard = false;
 			while (!validCard) {

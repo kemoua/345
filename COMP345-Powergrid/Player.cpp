@@ -73,3 +73,20 @@ void Player::updatePowerplantCards(vector<PowerplantCard> pcs) {
 	powerplantCards.clear();
 	powerplantCards = pcs;
 }
+
+bool Player::makeAuction() const {
+	int choice = 0;
+	while (choice != 1 and choice != 2) {
+		cout << "Player " << color << " with " << money << " elektro choose action:" << endl;
+		cout << "1: Pass" << endl;
+		cout << "2: Auction" << endl;
+		std::cin >> choice;
+		if (choice == 1) {
+			return Pass();
+		}
+		if (choice == 2) {
+			return Auction();
+		}
+
+	}
+}
