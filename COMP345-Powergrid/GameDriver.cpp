@@ -49,3 +49,11 @@ void GameDriver::DisplayPhase() {
 	cout << "								Current Action: " << game->getCurrentAction() << endl;
 	cout << "								**************************************************" << endl;
 }
+
+void GameDriver::UpdateStats() {
+	DisplayStats();
+}
+
+void GameDriver::DisplayStats() {
+ 
+}

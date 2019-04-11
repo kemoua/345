@@ -4,11 +4,11 @@
 #include "Player.h"
 #include "ResourceSetup.h"
 #include "CardDriver.h"
-#include "PhaseSubject.h"
+#include "Subject.h"
 
 using std::vector;
 
-class Game : public PhaseSubject {
+class Game : public Subject {
 public:
 	Game() : gameStep(1) {}
 	~Game() {}
