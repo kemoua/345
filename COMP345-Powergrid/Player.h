@@ -11,6 +11,7 @@
 #include "SummaryCard.h"
 #include "Resource.h"
 #include "PowerplantCard.h"
+#include "Strategy.h"
 
 using std::string;
 using std::vector;
@@ -48,6 +49,12 @@ public:
 	bool Pass() const { return false; }
 	bool Auction() const { return true; }
 
+	//Strategy pattern use
+	void setStrategy(Strategy *newStrategy) { this->strategy = newStrategy; }
+	int executeAuctionStrategy(vector<PowerplantCard> *pcs) { return this->strategy->executeAuction(pcs); }
+	int executeBuyResourcesStrategy(PowerplantCard *pc) { return this->strategy->executeBuyResources(pc); }
+	int executeBuildCitiesStrategy(vector<City> *cs) { return this->strategy->executeBuildCities(cs); }
+
 	bool operator < (const Player& p) const
 	{
 		if (cities.size() == p.getCities().size()) {
@@ -70,4 +77,5 @@ private:
 	vector<City> cities;
 	vector<PowerplantCard> powerplantCards;
 	SummaryCard summaryCard;
+	Strategy *strategy;
 };
