@@ -51,9 +51,9 @@ public:
 
 	//Strategy pattern use
 	void setStrategy(Strategy *newStrategy) { this->strategy = newStrategy; }
-	int executeAuctionStrategy(vector<PowerplantCard> *pcs) { return this->strategy->executeAuction(pcs); }
-	int executeBuyResourcesStrategy(PowerplantCard *pc) { return this->strategy->executeBuyResources(pc); }
-	int executeBuildCitiesStrategy(vector<City> *cs) { return this->strategy->executeBuildCities(cs); }
+	int executeAuctionStrategy(vector<PowerplantCard> *pcs) { return this->strategy->executeAuction(pcs, money); }
+	int executeBuyResourcesStrategy(PowerplantCard *pc, ResourceSetup *rs) { return this->strategy->executeBuyResources(pc, rs, money); }
+	int executeBuildCitiesStrategy(vector<City> *cs) { return this->strategy->executeBuildCities(cs, money); }
 
 	bool operator < (const Player& p) const
 	{
