@@ -1,29 +1,31 @@
 #include "GameDriver.h"
 #include <iostream>
+#include "Game.h"
 
 using std::cout;
 using std::endl;
 
 GameDriver::GameDriver() {
-	game = new Game();
-	game->Attach(this);
+	Game::instance();
+	Game::instance()->Attach(this);
 }
 
 GameDriver::~GameDriver() {
-	game->Detach(this);
-	delete game;
+	Game::instance()->Detach(this);
+	//delete game;
+	Game::instance()->ResetInstance();
 }
 
 void GameDriver::run() {
-	game->start();
+	Game::instance()->start();
 	while (true) {
-		game->phase1();
-		game->phase2();
-		game->phase3();
-		game->phase4();
-		game->phase5();
+		Game::instance()->phase1();
+		Game::instance()->phase2();
+		Game::instance()->phase3();
+		Game::instance()->phase4();
+		Game::instance()->phase5();
 	}
-	delete game;
+	//delete game;
 }
 
 void GameDriver::UpdatePhase() {
@@ -33,21 +35,21 @@ void GameDriver::UpdatePhase() {
 //Display phase info on notify
 void GameDriver::DisplayPhase() {
 	cout << "								**************************************************" << endl;
-	cout << "								Step: " << game->getCurrentStep() << "    Phase " << game->getCurrentPhase() << endl;
+	cout << "								Step: " << Game::instance()->getCurrentStep() << "    Phase " << Game::instance()->getCurrentPhase() << endl;
 	cout << "								Player order: ";
-	if (game->getCurrentPhase() == 3 || game->getCurrentPhase() == 4) {
-		vector<Player> p = game->getGamePlayers();
+	if (Game::instance()->getCurrentPhase() == 3 || Game::instance()->getCurrentPhase() == 4) {
+		vector<Player> p = Game::instance()->getGamePlayers();
 		for (vector<Player>::reverse_iterator it = p.rbegin(); it != p.rend(); ++it) {
 			cout << (*it).getColor() << " ";
 		}
 	}
 	else {
-		for (auto player : game->getGamePlayers()) {
+		for (auto player : Game::instance()->getGamePlayers()) {
 			cout << player.getColor() << " ";
 		}
 	}
-	cout << endl << "								Player's turn: " << game->getCurrentPlayer().getColor() << endl;
-	cout << "								Current Action: " << game->getCurrentAction() << endl;
+	cout << endl << "								Player's turn: " << Game::instance()->getCurrentPlayer().getColor() << endl;
+	cout << "								Current Action: " << Game::instance()->getCurrentAction() << endl;
 	cout << "								**************************************************" << endl;
 }
 
@@ -59,7 +61,7 @@ void GameDriver::UpdateStats() {
 void GameDriver::DisplayStats() {
 	cout << "						**************************************************" << endl;
 	//For each players
-	for (auto player : game->getGamePlayers()) {
+	for (auto player : Game::instance()->getGamePlayers()) {
 		cout << "						Player " << player.getColor() << endl;
 
 		//Display cities

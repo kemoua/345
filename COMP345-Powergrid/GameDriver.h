@@ -1,6 +1,5 @@
 #pragma once
 #include "Observer.h"
-#include "Game.h"
 
 class GameDriver : public Observer {
 public:
@@ -13,5 +12,5 @@ public:
 	void DisplayStats();
 
 private:
-	Game *game;
+	//Game *game;
 };

@@ -10,7 +10,10 @@ using std::vector;
 
 class Game : public Subject {
 public:
-	Game() : gameStep(1) {}
+	//Singleton pattern
+	static Game *instance();
+	void ResetInstance();
+
 	~Game() {}
 	void triggerStep2(); //To implement in .cpp since it will have more actions to handle
 	void triggerStep3(); //To implement in .cpp since it will have more actions to handle
@@ -40,4 +43,8 @@ private:
 	int currentPhase;
 	string currentAction;
 	Player* currentPlayer;
+	static Game *g_instance;
+	Game() {
+		gameStep = 1;
+	}
 };

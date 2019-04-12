@@ -18,6 +18,22 @@ using std::endl;
 using std::vector;
 using std::sort;
 
+
+//SINGLETON
+Game* Game::g_instance = 0;
+
+Game* Game::instance() {
+	if (!g_instance) {
+		g_instance = new Game();
+	}
+	return g_instance;
+}
+
+void Game::ResetInstance() {
+	delete g_instance;
+	g_instance = NULL;
+}
+
 //Determine winner
 void Game::triggerEnd() {
 	int currentIndex = 0;
@@ -753,3 +769,4 @@ void Game::phase5() {
 		cout << rb.first << ": " << rb.second << endl;
 	}
 }
+
