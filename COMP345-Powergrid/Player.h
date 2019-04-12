@@ -45,13 +45,15 @@ public:
 	void displayResources() const;
 	void getPayment(int payment) { money += payment; }
 
-	bool makeAuction() const ;
+	bool makeAuction(vector<PowerplantCard> *pcs);
 	bool Pass() const { return false; }
 	bool Auction() const { return true; }
 
 	//Strategy pattern use
 	void setStrategy(Strategy *newStrategy) { this->strategy = newStrategy; }
+	void deleteStrategy() { delete strategy; }
 	int executeAuctionStrategy(vector<PowerplantCard> *pcs) { return this->strategy->executeAuction(pcs, money); }
+	int executeBidStrategy(PowerplantCard *pc, int minimumBid) { return this->strategy->executeBid(pc, minimumBid, money); }
 	int executeBuyResourcesStrategy(PowerplantCard *pc, ResourceSetup *rs) { return this->strategy->executeBuyResources(pc, rs, money); }
 	int executeBuildCitiesStrategy(vector<City> *cs) { return this->strategy->executeBuildCities(cs, money); }
 

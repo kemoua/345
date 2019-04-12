@@ -19,7 +19,7 @@ int EnvironmentalistPlayer::executeAuction(vector<PowerplantCard> *pcs, int mone
 
 int EnvironmentalistPlayer::executeBid(PowerplantCard *pc, int minimumBid, int playerMoney) {
 	//Check if the card fits the player criteria
-	if ((*pc).getResourceQty == 0 || (*pc).getResourceType() == "garbage") {
+	if ((*pc).getResourceQty() == 0 || (*pc).getResourceType() == "garbage") {
 		//This player preferes to buy at the end of a round.
 		//I've implemented it as if the player only wants to buy a card for its minimum cost.
 		if (minimumBid == (*pc).getNumber()) {

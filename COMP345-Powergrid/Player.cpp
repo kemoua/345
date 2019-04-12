@@ -1,6 +1,10 @@
 #include "Player.h"
 #include <iostream>
 #include <algorithm>
+#include "AggressivePlayer.h"
+#include "ModeratePlayer.h"
+#include "EnvironmentalistPlayer.h"
+#include "HumanPlayer.h"
 
 using std::cout;
 using std::endl;
@@ -74,13 +78,53 @@ void Player::updatePowerplantCards(vector<PowerplantCard> pcs) {
 	powerplantCards = pcs;
 }
 
-bool Player::makeAuction() const {
+bool Player::makeAuction(vector<PowerplantCard> *pcs) {
 	int choice = 0;
 	while (choice != 1 and choice != 2) {
 		cout << "Player " << color << " with " << money << " elektro choose action:" << endl;
 		cout << "1: Pass" << endl;
 		cout << "2: Auction" << endl;
-		std::cin >> choice;
+		int strategyChoice = executeAuctionStrategy(pcs);
+		//If human player, asks for choice
+		if (strategyChoice == 99) {
+			//Display the choice for each other strategy
+			Player *p = new Player("dummy", money);
+			p->setStrategy(new AggressivePlayer());
+			strategyChoice = p->executeAuctionStrategy(pcs);
+			cout << "Aggressive strategy is to ";
+			if (strategyChoice == 0) {
+				cout << "pass." << endl;
+			}
+			else {
+				cout << "auction for card " << strategyChoice << endl;
+			}
+			p->deleteStrategy();
+			p->setStrategy(new ModeratePlayer());
+			strategyChoice = p->executeAuctionStrategy(pcs);
+			cout << "Moderate strategy is to ";
+			if (strategyChoice == 0) {
+				cout << "pass." << endl;
+			}
+			else {
+				cout << "auction for card " << strategyChoice << endl;
+			}
+			p->deleteStrategy();
+			p->setStrategy(new EnvironmentalistPlayer());
+			strategyChoice = p->executeAuctionStrategy(pcs);
+			cout << "Environmentalist strategy is to ";
+			if (strategyChoice == 0) {
+				cout << "pass." << endl;
+			}
+			else {
+				cout << "auction for card " << strategyChoice << endl;
+			}
+			delete p;
+			std::cin >> choice;
+		}
+		else {
+			//Choice depends on strategy
+			choice = strategyChoice == 0 ? 1 : 2;
+		}
 		if (choice == 1) {
 			return Pass();
 		}

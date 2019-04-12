@@ -7,6 +7,10 @@
 #include "MapLoader.h"
 #include "CardDriver.h"
 #include "Color.h"
+#include "AggressivePlayer.h"
+#include "ModeratePlayer.h"
+#include "EnvironmentalistPlayer.h"
+#include "HumanPlayer.h"
 
 using std::string;
 using std::cout;
@@ -135,6 +139,25 @@ void Game::start() {
 			p.addHouse(House(currentColor));
 		}
 		p.addSummaryCard(summaryCard);
+
+		//Add strategies
+		switch (i)
+		{
+		case 0: p.setStrategy(new HumanPlayer());
+			break;
+		case 1: p.setStrategy(new AggressivePlayer());
+			break;
+		case 2: p.setStrategy(new ModeratePlayer());
+			break;
+		case 3: p.setStrategy(new EnvironmentalistPlayer());
+			break;
+		case 4: p.setStrategy(new HumanPlayer());
+			break;
+		case 5: p.setStrategy(new HumanPlayer());
+			break;
+		default:
+			break;
+		}
 		gamePlayers.push_back(p);
 	}
 	for (auto p : gamePlayers) {
@@ -234,7 +257,7 @@ Player bidPhase(vector<Player>* playersNotDone, PowerplantCard* cardBid, vector<
 	vector<Player>* bidPlayersPtr = &bidPlayers; //Keep track of list of players who can bid
 	bool bid = true;
 	int minimumBid = bidPlayers.size() == 1 ? cardBid->getNumber() : cardBid->getNumber() - 1; //Keep track of the minimum possible bid on the card
-	int bidInput;
+	int bidInput, strategyBid;
 	while (bid) {
 		//Bid is over when there's only one possible bidder
 		if (bidPlayers.size() == 1) {
@@ -250,7 +273,14 @@ Player bidPhase(vector<Player>* playersNotDone, PowerplantCard* cardBid, vector<
 			while (bidPlayers.size() > 1) {
 				Player player = bidPlayers.at(index);
 				cout << "Player " << player.getColor() << " with " << player.getMoney() << " elektro enter bid: ";
-				cin >> bidInput;
+				//Use strategy
+				strategyBid = player.executeBidStrategy(cardBid, minimumBid + 1);
+				if (strategyBid == 99) {
+					cin >> bidInput;
+				}
+				else {
+					bidInput = strategyBid;
+				}
 				while (bidInput != 0 && (bidInput < (minimumBid + 1) || bidInput > player.getMoney())) {
 					cout << "You must bid at least " << (minimumBid + 1) << " elektro and you cannot bid more than what you have." << endl;
 					cout << "Enter new bid: ";
@@ -303,7 +333,7 @@ Player bidPhase(vector<Player>* playersNotDone, PowerplantCard* cardBid, vector<
 //Auction powerplants
 void Game::phase2() {
 	currentPhase = 2;
-	int choice;
+	int choice, strategyChoice;
 	string resourceType;
 	vector<Player> playersNotDone = gamePlayers; //Keep track of the players who can still make an action
 	vector<Player>* gamePlayersPtr = &gamePlayers;
@@ -322,12 +352,21 @@ void Game::phase2() {
 		}
 		cout << endl;
 		//Player choose action
-		if (player.makeAuction()) {
+		if (player.makeAuction(&gameCards.getCardsOnBoard())) {
 			//Select powerplant card
 			bool validCard = false;
 			while (!validCard) {
 				cout << "Enter the number of the card you want: ";
-				cin >> choice;
+				//Get the powerplant card number with the strategy
+				strategyChoice = player.executeAuctionStrategy(&gameCards.getCardsOnBoard());
+				//Inputs choice if no strategies were implemented
+				if (strategyChoice == 99) {
+					cin >> choice;
+				}
+				else {
+					choice = strategyChoice;
+					cout << choice << endl;
+				}
 				for (auto card : gameCards.getCardsOnBoard()) {
 					//Check if the user has enough money for the selected card
 					if (card.getNumber() == choice) {
@@ -384,6 +423,8 @@ void Game::phase3() {
 	currentPhase = 3;
 	currentAction = "Buy resources for powerplants";
 	for (vector<Player>::reverse_iterator player = gamePlayers.rbegin(); player != gamePlayers.rend(); ++player) {
+		int strategyChoice = 99;
+		int strategyCardChoice = 1; //This is used to iterate through each cards owned by a player with a strategy implemented for buying resources
 		currentPlayer = &(*player);
 		NotifyPhase();
 		//Skip player turn if he has no powerplant cards
@@ -401,9 +442,22 @@ void Game::phase3() {
 				//Display list of powerplants owned by player
 				displayOwnedPCards(*player);
 				int cardChoice = -1;
-				while (cardChoice < 0 || cardChoice >(*player).getPowerplantCards().size()) {
-					cout << "Enter card for which you want to buy resources: ";
-					cin >> cardChoice;
+				//Use Strategy
+				if (strategyCardChoice > (*player).getPowerplantCards().size()) { //if iterated through all cards owned by player
+					strategyChoice = 0;
+				}
+				else {
+					strategyChoice = (*player).executeBuyResourcesStrategy(&(*player).getPowerplantCards().at(strategyCardChoice - 1), &gameResources);
+				}
+				if (strategyChoice == 99) {
+					while (cardChoice < 0 || cardChoice >(*player).getPowerplantCards().size()) {
+						cout << "Enter card for which you want to buy resources: ";
+						cin >> cardChoice;
+					}
+				}
+				else {
+					cardChoice = strategyChoice == 0 ? strategyChoice : strategyCardChoice;
+					strategyCardChoice++;
 				}
 				//End buying phase for the user when he inputs 0
 				if (cardChoice == 0) {
@@ -411,7 +465,6 @@ void Game::phase3() {
 					//TODO: Reallocating resources
 					//
 					displayOwnedPCards(*player);
-
 					buyingResources = false;
 					break;
 				}
@@ -429,10 +482,19 @@ void Game::phase3() {
 				}
 				cout << "You can buy " << (2 * selectedPC.getResourceQty() - selectedPC.getAvailableResources().size()) << " " << selectedPC.getResourceType() << endl;
 				cout << "What would you like to buy? (resource quantity)" << endl;
-				cin >> resourceChoice >> qtyChoice;
-				cout << "This would cost you: " << gameResources.getPrice(resourceChoice, qtyChoice) << " elektro." << endl;
-				cout << "Confirm purchase? ";
-				cin >> confirmChoice;
+				if (strategyChoice == 99) {
+					cin >> resourceChoice >> qtyChoice;
+					cout << "This would cost you: " << gameResources.getPrice(resourceChoice, qtyChoice) << " elektro." << endl;
+					cout << "Confirm purchase? ";
+					cin >> confirmChoice;
+				}
+				else {
+					//Strategy gives the quantity of resources to buy
+					resourceChoice = selectedPC.getResourceType();
+					qtyChoice = strategyChoice;
+					cout << resourceChoice << " " << qtyChoice << endl;
+					confirmChoice = qtyChoice == 0 ? "no" : "yes";
+				}
 				if (confirmChoice == "yes" || confirmChoice == "y" || confirmChoice == "1") {
 					//When buying resources for the plant
 					for (int i = 0; i < qtyChoice; i++) {

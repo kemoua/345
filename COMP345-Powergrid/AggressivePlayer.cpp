@@ -2,6 +2,7 @@
 
 int AggressivePlayer::executeAuction(vector<PowerplantCard> *pcs, int money) {
 	for (auto pc : *pcs) {
+
 		//Basic strategy: pass if you need 2 resources to power a city, auction otherwise
 		//It will return the number of the first card that fits the criteria.
 		if (pc.getCities() != 0 && (pc.getResourceQty() / pc.getCities() < 2)) {

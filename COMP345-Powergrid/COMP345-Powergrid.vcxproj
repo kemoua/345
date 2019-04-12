@@ -160,6 +160,7 @@
     <ClInclude Include="EnvironmentalistPlayer.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameDriver.h" />
+    <ClInclude Include="HumanPlayer.h" />
     <ClInclude Include="ModeratePlayer.h" />
     <ClInclude Include="Observer.h" />
     <ClInclude Include="Strategy.h" />

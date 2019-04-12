@@ -24,7 +24,7 @@ int ModeratePlayer::executeBid(PowerplantCard *pc, int minimumBid, int playerMon
 int ModeratePlayer::executeBuyResources(PowerplantCard *pc, ResourceSetup * rs, int playerMoney) {
 	//This player will buy the minimum amount of resources required by the powerplant card,
 	//as long as it leaves him with enough elektros to buy a city.
-	if (playerMoney - (*rs).getPrice((*pc).getResourceType(), (*pc).getResourceQty()) >= 35) {
+	if (playerMoney - (*rs).getPrice((*pc).getResourceType(), (*pc).getResourceQty()) >= 30) {
 		return (*pc).getResourceQty();
 	}
 	return 0;
