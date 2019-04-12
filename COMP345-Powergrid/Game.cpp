@@ -555,6 +555,7 @@ vector<City> getAvailableCities(Player player, Map m, int step) {
 void Game::phase4() {
 	currentPhase = 4;
 	currentAction = "Build a house in a city";
+	int strategyChoice;
 	for (vector<Player>::reverse_iterator player = gamePlayers.rbegin(); player != gamePlayers.rend(); ++player) {
 		currentPlayer = &(*player);
 		NotifyPhase();
@@ -572,7 +573,15 @@ void Game::phase4() {
 			cout << index << ": " << city.getName() << " (has " << city.getHouses().size() << " house(s))" << endl;
 			index++;
 		}
-		cin >> cityChoice; //TODO: Add validation
+		//Use Strategy
+		strategyChoice = (*player).executeBuildCitiesStrategy(&availableCities);
+		if (strategyChoice == 99) {
+			cin >> cityChoice; //TODO: Add validation
+		}
+		else {
+			cityChoice = strategyChoice;
+			cout << cityChoice << endl;
+		}
 		if (cityChoice == 0) {
 			continue;
 		}
